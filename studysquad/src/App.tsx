@@ -1,16 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from './services/supabaseClient'
 
 function App() {
+  const [status, setStatus] = useState('Test en cours...')
+
   useEffect(() => {
     async function testSupabase() {
-      const { data, error } = await supabase.auth.getSession()
-      console.log('Supabase test auth.getSession:', { data, error })
+      setStatus('Test en cours...')
+      const { error } = await supabase.auth.getUser()
+      console.log('Supabase test auth.getUser:', { error })
 
       if (error) {
+        if (error.message.toLowerCase().includes('auth session missing')) {
+          setStatus('Connexion Supabase OK (pas d utilisateur connecté).')
+          return
+        }
         console.error('Supabase erreur de connexion :', error.message)
+        setStatus(`Erreur Supabase: ${error.message}`)
       } else {
         console.log('Supabase : connexion OK (requête envoyée)')
+        setStatus('Connexion Supabase OK.')
       }
     }
 
@@ -20,7 +29,7 @@ function App() {
   return (
     <main className="p-8">
       <h1>Test de connexion Supabase</h1>
-      <p>Ouvre la console du navigateur pour voir le résultat.</p>
+      <p>{status}</p>
     </main>
   )
 }
