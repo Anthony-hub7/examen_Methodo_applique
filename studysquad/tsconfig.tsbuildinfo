@@ -1,0 +1,1 @@
+{"root":["./vite.config.ts","./src/App.tsx","./src/main.tsx","./src/services/supabaseClient.ts"],"errors":true,"version":"6.0.2"}
