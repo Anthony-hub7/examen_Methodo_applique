@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
+import {BrowserRouter,Routes,Route,Navigate} from "react-router-dom"
 import { supabase } from './services/supabaseClient'
+import Login from "./pages/auth/Login"
+import Signup from './pages/auth/Signup'
+// import Ghost from './components/ui/Ghost'
 
 function App() {
   const [status, setStatus] = useState('Test en cours...')
@@ -27,10 +31,21 @@ function App() {
   }, [])
 
   return (
-    <main className="p-8">
+    <>
+    {/* <main className="p-8">
       <h1>Test de connexion Supabase</h1>
       <p>{status}</p>
-    </main>
+    </main> */}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signup />} />
+
+      </Routes>
+    </BrowserRouter>
+    </>
+
   )
 }
 
