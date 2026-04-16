@@ -81,235 +81,205 @@ export default function ClientDash() {
     { name: "UI/UX Crew", score: 70 }
   ]
 
+  const commonChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: "rgba(255,255,255,0.85)"
+        }
+      },
+      tooltip: {
+        backgroundColor: "#000",
+        titleColor: "#fff",
+        bodyColor: "#fff"
+      }
+    }
+  }
+
+  const lineChartOptions = {
+    ...commonChartOptions,
+    scales: {
+      x: {
+        ticks: { color: "rgba(255,255,255,0.75)" },
+        grid: { color: "rgba(255,255,255,0.08)" }
+      },
+      y: {
+        ticks: { color: "rgba(255,255,255,0.75)" },
+        grid: { color: "rgba(255,255,255,0.08)" }
+      }
+    }
+  }
+
   return (
-    <div style={styles.container}>
+    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-xl font-bold tracking-tight">Dashboard client</h2>
 
-      <h2 style={styles.title}>Dashboard client</h2>
-
-      {/* FILTER */}
-      <div style={styles.filterBox}>
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          style={styles.select}
-        >
-          <option value="jour">Jour</option>
-          <option value="semaine">Semaine</option>
-          <option value="mois">Mois</option>
-          <option value="annee">Année</option>
-        </select>
-      </div>
-
-      {/* KPI */}
-      <motion.div
-        style={styles.kpiGrid}
-        key={filter}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-
-        <div style={styles.kpiCard}>
-          <ClipboardList size={18} />
-          <p>Devoirs terminés</p>
-          <h3>{current.devoirs.termines}</h3>
-        </div>
-
-        <div style={styles.kpiCard}>
-          <Users size={18} />
-          <p>Groupes actifs</p>
-          <h3>{current.groupes.actifs}</h3>
-        </div>
-
-        <div style={styles.kpiCard}>
-          <AlertTriangle size={18} />
-          <p>Sans groupe</p>
-          <h3>{current.devoirs.sans_groupe}</h3>
-        </div>
-
-        <div style={styles.kpiCard}>
-          <CheckCircle size={18} />
-          <p>En retard</p>
-          <h3>{current.devoirs.en_retard}</h3>
-        </div>
-
-      </motion.div>
-
-      {/* DEVOIRS + GROUPES */}
-      <div style={styles.row}>
-
-        <motion.div
-          style={styles.box}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <h3>Statut des devoirs</h3>
-
-          <Doughnut
-            data={{
-              labels: ["Terminés", "Sans groupe", "En retard"],
-              datasets: [{
-                data: [
-                  current.devoirs.termines,
-                  current.devoirs.sans_groupe,
-                  current.devoirs.en_retard
-                ],
-                backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"]
-              }]
-            }}
-          />
-        </motion.div>
-
-        <motion.div
-          style={styles.box}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <h3>Groupes</h3>
-
-          <Bar
-            data={{
-              labels: ["Actifs", "Inactifs"],
-              datasets: [{
-                data: [
-                  current.groupes.actifs,
-                  current.groupes.inactifs
-                ],
-                backgroundColor: ["#631319", "#333"]
-              }]
-            }}
-          />
-        </motion.div>
-
-      </div>
-
-      {/* CHAT + DEVOIRS ACTIVITY */}
-      <motion.div
-        style={styles.box}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-
-        <div style={styles.titleRow}>
-          <MessageSquare size={18} />
-          <h3>Activité globale (Chat + Devoirs)</h3>
-        </div>
-
-        <Line
-          data={{
-            labels: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
-            datasets: [
-              {
-                label: "Chat",
-                data: current.chat,
-                borderColor: "#00bfff",
-                tension: 0.4
-              },
-              {
-                label: "Devoirs",
-                data: current.devoirs_progress,
-                borderColor: "#f1c40f",
-                tension: 0.4
-              }
-            ]
-          }}
-        />
-      </motion.div>
-
-      {/* TOP GROUPES */}
-      <motion.div
-        style={styles.box}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
-      >
-
-        <div style={styles.titleRow}>
-          <Trophy size={18} />
-          <h3>Top groupes actifs</h3>
-        </div>
-
-        {topGroupes.map((g, i) => (
-          <div key={i} style={styles.rankItem}>
-            <span>#{i + 1} {g.name}</span>
-            <b>{g.score}%</b>
+          {/* FILTER */}
+          <div className="flex items-center gap-2">
+            <label htmlFor="dash-filter" className="sr-only">
+              Filtrer
+            </label>
+            <select
+              id="dash-filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90 outline-none focus:border-brand-red/60"
+            >
+              <option value="jour">Jour</option>
+              <option value="semaine">Semaine</option>
+              <option value="mois">Mois</option>
+              <option value="annee">Année</option>
+            </select>
           </div>
-        ))}
+        </div>
 
-      </motion.div>
+        {/* KPI */}
+        <motion.div
+          key={filter}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <ClipboardList className="text-brand-red" size={18} />
+            <p className="mt-2 text-sm text-white/75">Devoirs terminés</p>
+            <h3 className="mt-2 text-2xl font-bold">{current.devoirs.termines}</h3>
+          </div>
 
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <Users className="text-brand-red" size={18} />
+            <p className="mt-2 text-sm text-white/75">Groupes actifs</p>
+            <h3 className="mt-2 text-2xl font-bold">{current.groupes.actifs}</h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <AlertTriangle className="text-brand-red" size={18} />
+            <p className="mt-2 text-sm text-white/75">Sans groupe</p>
+            <h3 className="mt-2 text-2xl font-bold">{current.devoirs.sans_groupe}</h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <CheckCircle className="text-brand-red" size={18} />
+            <p className="mt-2 text-sm text-white/75">En retard</p>
+            <h3 className="mt-2 text-2xl font-bold">{current.devoirs.en_retard}</h3>
+          </div>
+        </motion.div>
+
+        {/* DEVOIRS + GROUPES */}
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+          >
+            <h3 className="mb-3 text-base font-semibold text-white/95">Statut des devoirs</h3>
+            <div className="relative h-72 sm:h-80">
+              <Doughnut
+                options={commonChartOptions}
+                data={{
+                  labels: ["Terminés", "Sans groupe", "En retard"],
+                  datasets: [
+                    {
+                      data: [current.devoirs.termines, current.devoirs.sans_groupe, current.devoirs.en_retard],
+                      backgroundColor: ["#22c55e", "#facc15", "#df2531"]
+                    }
+                  ]
+                }}
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+          >
+            <h3 className="mb-3 text-base font-semibold text-white/95">Groupes</h3>
+            <div className="relative h-72 sm:h-80">
+              <Bar
+                options={commonChartOptions}
+                data={{
+                  labels: ["Actifs", "Inactifs"],
+                  datasets: [
+                    {
+                      data: [current.groupes.actifs, current.groupes.inactifs],
+                      backgroundColor: ["rgba(223,37,49,0.9)", "rgba(255,255,255,0.25)"],
+                      borderRadius: 10
+                    }
+                  ]
+                }}
+              />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* CHAT + DEVOIRS ACTIVITY */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5"
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <MessageSquare className="text-brand-red" size={18} />
+            <h3 className="text-base font-semibold text-white/95">Activité globale (Chat + Devoirs)</h3>
+          </div>
+
+          <div className="relative h-64 sm:h-72 md:h-80">
+            <Line
+              options={lineChartOptions}
+              data={{
+                labels: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
+                datasets: [
+                  {
+                    label: "Chat",
+                    data: current.chat,
+                    borderColor: "#00bfff",
+                    tension: 0.35
+                  },
+                  {
+                    label: "Devoirs",
+                    data: current.devoirs_progress,
+                    borderColor: "#facc15",
+                    tension: 0.35
+                  }
+                ]
+              }}
+            />
+          </div>
+        </motion.div>
+
+        {/* TOP GROUPES */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5"
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <Trophy className="text-brand-red" size={18} />
+            <h3 className="text-base font-semibold text-white/95">Top groupes actifs</h3>
+          </div>
+
+          <div className="divide-y divide-white/10">
+            {topGroupes.map((g, i) => (
+              <div key={i} className="flex items-center justify-between py-3">
+                <span className="text-sm text-white/85">
+                  #{i + 1} {g.name}
+                </span>
+                <b className="text-sm text-white/95">{g.score}%</b>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
-}
-
-/* STYLE */
-const styles = {
-  container: {
-    padding: "20px",
-    background: "#0f0f0f",
-    color: "white",
-    minHeight: "100vh"
-  },
-
-  title: {
-    marginBottom: "10px"
-  },
-
-  filterBox: {
-    marginBottom: "20px"
-  },
-
-  select: {
-    padding: "10px",
-    background: "#1c1c1c",
-    color: "white",
-    border: "1px solid #333",
-    borderRadius: "10px"
-  },
-
-  kpiGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "15px",
-    marginBottom: "20px"
-  },
-
-  kpiCard: {
-    background: "#1c1c1c",
-    padding: "15px",
-    borderRadius: "12px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px"
-  },
-
-  row: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "15px",
-    marginBottom: "20px"
-  },
-
-  box: {
-    background: "#1c1c1c",
-    padding: "20px",
-    borderRadius: "12px"
-  },
-
-  titleRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginBottom: "10px"
-  },
-
-  rankItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "8px",
-    borderBottom: "1px solid #333"
-  }
 }

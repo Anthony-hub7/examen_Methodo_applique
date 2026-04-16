@@ -82,91 +82,120 @@ export default function Dashboard() {
             ? [2, 4, 3, 5, 6, 4, 7]
             : [10, 12, 9, 15, 18, 20],
 
-        borderColor: "#631319",
-        backgroundColor: "rgba(99,19,25,0.2)",
+        borderColor: "#df2531",
+        backgroundColor: "rgba(223,37,49,0.18)",
         tension: 0.4,
         fill: true
       }
     ]
   }
 
+  const commonChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: "rgba(255,255,255,0.85)"
+        }
+      },
+      tooltip: {
+        backgroundColor: "#000",
+        titleColor: "#fff",
+        bodyColor: "#fff"
+      }
+    }
+  }
+
+  const lineChartOptions = {
+    ...commonChartOptions,
+    scales: {
+      x: {
+        ticks: { color: "rgba(255,255,255,0.75)" },
+        grid: { color: "rgba(255,255,255,0.08)" }
+      },
+      y: {
+        ticks: { color: "rgba(255,255,255,0.75)" },
+        grid: { color: "rgba(255,255,255,0.08)" }
+      }
+    }
+  }
+
+  // Ajuste palette doughnut aux couleurs du theme (futuriste rouge/noir)
+  const themedDoughnutData = {
+    ...doughnutData,
+    datasets: doughnutData.datasets.map((d) => ({
+      ...d,
+      backgroundColor: ["#22c55e", "#df2531", "#facc15"]
+    }))
+  }
+
+  const themedBarData = {
+    ...barData,
+    datasets: barData.datasets.map((d) => ({
+      ...d,
+      backgroundColor: ["rgba(223,37,49,0.9)", "rgba(255,255,255,0.25)", "rgba(162,28,175,0.35)", "rgba(126,235,37,0.25)"]
+    }))
+  }
+
   return (
-    <div style={styles.container}>
+    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl">
+        <h2 className="mb-5 text-xl font-bold tracking-tight">📊 Dashboard Admin</h2>
 
-      <h2 style={styles.title}>📊 Dashboard Admin</h2>
+        {/* TOP STATS */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <h3 className="mb-3 text-base font-semibold text-white/95">Vue globale</h3>
+            <div className="relative h-72 sm:h-80">
+              <Bar options={commonChartOptions} data={themedBarData} />
+            </div>
+          </div>
 
-      {/* TOP STATS */}
-      <div style={styles.grid}>
-
-        <div style={styles.card}>
-          <h3>Vue globale</h3>
-          <Bar data={barData} />
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <h3 className="mb-3 text-base font-semibold text-white/95">État des devoirs</h3>
+            <div className="relative h-72 sm:h-80">
+              <Doughnut options={commonChartOptions} data={themedDoughnutData} />
+            </div>
+          </div>
         </div>
 
-        <div style={styles.card}>
-          <h3>État des devoirs</h3>
-          <Doughnut data={doughnutData} />
-        </div>
+        {/* SWITCH + LINE */}
+        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setView("semaine")}
+                className={
+                  "rounded-xl border px-3 py-2 text-sm transition " +
+                  (view === "semaine"
+                    ? "border-brand-red/60 bg-brand-red/20 text-white"
+                    : "border-white/10 bg-white/5 text-white/80 hover:border-brand-red/40")
+                }
+              >
+                Semaine
+              </button>
+              <button
+                type="button"
+                onClick={() => setView("mois")}
+                className={
+                  "rounded-xl border px-3 py-2 text-sm transition " +
+                  (view === "mois"
+                    ? "border-brand-red/60 bg-brand-red/20 text-white"
+                    : "border-white/10 bg-white/5 text-white/80 hover:border-brand-red/40")
+                }
+              >
+                Mois
+              </button>
+            </div>
+          </div>
 
+          <div className="relative h-64 sm:h-72 md:h-80">
+            <Line options={lineChartOptions} data={lineData} />
+          </div>
+        </div>
       </div>
-
-      {/* SWITCH + LINE */}
-      <div style={styles.bottomCard}>
-
-        <div style={styles.switch}>
-          <button onClick={() => setView("semaine")}>
-            Semaine
-          </button>
-
-          <button onClick={() => setView("mois")}>
-            Mois
-          </button>
-        </div>
-
-        <Line data={lineData} />
-      </div>
-
     </div>
   )
-}
-const styles = {
-  container: {
-    padding: "20px",
-    minHeight: "100vh",
-    background: "radial-gradient(circle at top, #111, #000)",
-    color: "white",
-    fontFamily: "Poppins"
-  },
-
-  title: {
-    marginBottom: "20px"
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px"
-  },
-
-  card: {
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,255,255,0.1)",
-    borderRadius: "20px",
-    padding: "20px",
-    backdropFilter: "blur(12px)"
-  },
-
-  bottomCard: {
-    marginTop: "20px",
-    background: "rgba(255,255,255,0.05)",
-    borderRadius: "20px",
-    padding: "20px",
-    border: "1px solid rgba(255,255,255,0.1)"
-  },
-
-  switch: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "10px"
-  }
 }
