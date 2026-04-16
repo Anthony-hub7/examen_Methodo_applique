@@ -1,313 +1,89 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { supabase } from "../../services/supabaseClient"
-import { Eye, EyeOff } from "lucide-react"
-import Ghost from "../ui/Ghost"
-import data from "../../services/dataAdmin.json"
-
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [msg, setMsg] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-
-  // const handleLogin = async (e) => {
-  //   e.preventDefault()
-
-  //   setMsg("Connexion...")
-
-  //   const { error } = await supabase.auth.signInWithPassword({
-  //     email,
-  //     password,
-  //   })
-
-  //   if (error) {
-  //     setMsg(error.message)
-  //   } else {
-  //     setMsg("Connexion réussie 👍")
-  //   }
-  // }
   const navigate = useNavigate()
-// const handleLogin = (e) => {
-//   e.preventDefault()
+  const { login } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-//   const user = data.user || data.client
-//   if (!user) {
-//     setMsg("Email ou mot de passe incorrect")
-//     console.log("Email ou mot de passe incorrect");
-//     return
-//   }
-
-//   setMsg("Connexion réussie 👍")
-//     console.log("Connexion réussie 👍");
-
-// if (email === user.email && password === user.password) {
-//   console.log("OK")
-//   if(user.role == "admin") navigate("/card")
-//   else navigate ("/clientStat")
-// } else {
-//   setMsg("Login incorrect")
-// }
-// }
-
-const handleLogin = (e) => {
-  e.preventDefault()
-
-  const users = [data.user, data.client]
-
-  const foundUser = users.find(
-    (u) => u.email === email && u.password === password
-  )
-
-  if (!foundUser) {
-    setMsg("Login incorrect")
-    return
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setError('')
+    setLoading(true)
+    try {
+      const user = await login({ email, password })
+      navigate(user.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
+    } catch (currentError) {
+      setError(currentError.message)
+    } finally {
+      setLoading(false)
+    }
   }
-
-  setMsg("Connexion réussie 👍")
-
-  if (foundUser.role === "admin") {
-    navigate("/card")
-  } else {
-    navigate("/clientDash")
-  }
-}
-
-  //ghost
-  const [ghostMode, setGhostMode] = useState("idle")
-const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-
-const handleMouseMove = (e) => {
-  const x = e.clientX / window.innerWidth
-  const y = e.clientY / window.innerHeight
-  
-  setMousePos({ x, y })
-}
 
   return (
-  <div style={styles.container}>
+    <div className="relative min-h-screen bg-black text-white">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover opacity-60"
+      >
+        <source src="/background1.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black" />
 
-    {/* VIDEO BACKGROUND */}
-    <video autoPlay muted loop style={styles.videoBg}>
-      <source src="/background2.mp4" type="video/mp4" />
-    </video>
-
-    {/* OVERLAY */}
-    <div style={styles.overlay}></div>
-
-    <div style={styles.card}>
-
-      {/* LEFT IMAGE */}
-      <div style={styles.left}>
-        <div style={styles.GhostBox}>
-        <Ghost/>
-
-        </div>
-      </div>
-
-      {/* RIGHT FORM */}
-      <div style={styles.right}>
+      <div className="relative mx-auto flex min-h-screen max-w-md items-center px-6">
         <form
-        //  onSubmit={handleLogin}
-        onSubmit={(e) => {
-    console.log("FORM SUBMIT")
-    handleLogin(e)
-  }}
-        
-        style={styles.form}>
-          <img src="/Logo.png" style={{ width: "90%" }} />
+          onSubmit={handleSubmit}
+          className="w-full space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6"
+        >
+          <div className="flex flex-col items-center gap-2">
+            <img src="/LogoChap.png" alt="StudySquad logo chap" className="h-14 w-auto" />
+            <h1 className="text-2xl font-bold">Connexion</h1>
+          </div>
+
+          <p className="text-sm text-white/70">Admin mock: `admin@test.com / admin`</p>
+          <p className="text-sm text-white/70">Etudiant mock: `client@test.com / client`</p>
 
           <input
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
+            onChange={(event) => setEmail(event.target.value)}
+            className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2"
+            required
           />
-          
-         <div style={{ position: "relative", width: "100%" }}>
-  <input
-    type={showPassword ? "text" : "password"}
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    style={{ ...styles.input, paddingRight: "40px" }}
-  />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2"
+            required
+          />
+          {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
-  <button
-    type="button"
-    onClick={() => setShowPassword(!showPassword)}
-    style={styles.eyeBtn}
-  >
-    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
-  </button>
-</div>
-
-          <br/>
-          <button type="submit" style={styles.button}>
-            Se connecter
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-brand-red px-4 py-2 font-semibold disabled:opacity-60"
+          >
+            {loading ? 'Connexion...' : 'Se connecter'}
           </button>
-          <p style={styles.sign}
-          onClick={() => navigate("/signin")}
-          >S'inscrire</p>
-          <p>{msg}</p>
 
+          <p className="text-sm text-white/80">
+            Pas encore de compte ?{' '}
+            <Link className="text-brand-red underline" to="/signin">
+              S'inscrire
+            </Link>
+          </p>
         </form>
       </div>
-
     </div>
-  </div>
-)
-}
-
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    overflow: "hidden",
-    color: "white",
-  },
-
-  videoBg: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    zIndex: 0,
-  },
-
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    // background: "#63131891", 
-    background : "#00000086",
-    zIndex: 1,
-  },
-
-  form: {
-    position: "relative",
-    zIndex: 2,
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    padding: "20px",
-    background: "rgba(0, 0, 0, 0.64)",
-    borderRadius: "20px",
-    width: "300px",
-    backdropFilter: "blur(10px)",
-  },
-
- input: {
-  padding: "10px",
-  borderRadius: "20px",
-  border: "1px solid #ffffff",
-  background: "#ffffff46",
-  color: "white",
-  outline: "none",
-  transition: "0.2s",
-},
-
-inputFocus: {
-  border: "1px solid #631319",
-  boxShadow: "0 0 8px #63131966",
-},
-
-  button: {
-    padding: "10px",
-    background: "#631319",
-    color: "white",
-    border: "none",
-    borderRadius: "20px",
-    cursor: "pointer",
-  },
-  card: {
-  position: "relative",
-  zIndex: 2,
-  display: "flex",
-  width: "800px",
-  height: "450px",
-  borderRadius: "15px",
-  overflow: "hidden",
-  backdropFilter: "blur(10px)",
-  background: "rgba(0,0,0,0.4)",
-},
-
-left: {
-  flex: 1,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100%",
-  position: "relative",
-},
-
-image: {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-},
-
-right: {
-  flex: 1,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-},
-
-form: {
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-  width: "80%",
-},
-ghostBox: {
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  position: "relative",
-},
-sign: {
-  color: "#631319",
-  fontFamily: "Poppins, sans-serif",
-  fontWeight: "500",
-  marginLeft: "auto", 
-  fontSize:"14px",
-  cursor: "pointer",
-  
-},
-
-input: {
-  padding: "10px 40px 10px 10px", 
-  borderRadius: "20px",
-  border: "1px solid #ffffff",
-  background: "#ffffff46",
-  color: "white",
-  outline: "none",
-  width: "100%", 
-},
-
-eyeBtn: {
-  position: "absolute",
-  right: "10px",
-  top: "50%",
-  transform: "translateY(-50%)",
-  background: "transparent",
-  border: "none",
-  cursor: "pointer",
-  color: "white",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}
+  )
 }
