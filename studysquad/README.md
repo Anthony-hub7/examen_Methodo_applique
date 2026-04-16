@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# StudySquad App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application React + TypeScript pour le suivi de devoirs, la collaboration en groupe et la gestion de l'aide entre membres.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Iconify
+- Framer Motion
+- Supabase
 
-## React Compiler
+## Organisation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `src/pages` pour les ecrans;
+- `src/components` pour les blocs reutilisables;
+- `src/services` pour les appels Supabase;
+- `src/hooks` pour la logique partagee;
+- `src/context` pour l'etat global;
+- `src/types` pour les types metier;
+- `public/sql/sql_v1.sql` pour le schema reference.
 
-## Expanding the ESLint configuration
+## Regles de travail
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ne jamais utiliser `any`;
+- importer les types metier depuis `src/types/index.ts`;
+- garder les services aligns sur le schema SQL;
+- utiliser Tailwind, Iconify et Framer Motion pour le rendu et les animations;
+- privilegier des erreurs explicites et des composants lisibles.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Scripts
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `npm run dev` pour lancer le serveur local;
+- `npm run build` pour verifier la compilation;
+- `npm run lint` pour controler la qualite du code.
