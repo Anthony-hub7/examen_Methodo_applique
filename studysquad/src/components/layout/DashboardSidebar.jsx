@@ -5,9 +5,8 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
 
   const basePath = navLinks?.basePath || '/dashboard/student'
   const devoirsPath = navLinks?.devoirsPath || basePath
-  const groupesPath = navLinks?.groupesPath
+  const groupesPath = navLinks?.groupesPath || `${basePath}/groupes`
   const communityPath = navLinks?.communityPath || `${basePath}/community`
-  const isAdmin = Boolean(groupesPath)
   const normalizePath = (p) => String(p).split('#')[0]
   const isActive = (path) => location.pathname === normalizePath(path)
 
@@ -45,20 +44,18 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
             Devoirs
           </Link>
         
-        {isAdmin ? (
-          <Link
-            to={groupesPath}
-            onClick={handleNavigate}
-            className={
-              'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
-              (isActive(groupesPath)
-                ? 'border-white/20 bg-white/10 text-white'
-                : 'border-white/10 bg-white/5 text-white/90')
-            }
-          >
-            Groupes
-          </Link>
-        ) : null}
+        <Link
+          to={groupesPath}
+          onClick={handleNavigate}
+          className={
+            'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
+            (isActive(groupesPath)
+              ? 'border-white/20 bg-white/10 text-white'
+              : 'border-white/10 bg-white/5 text-white/90')
+          }
+        >
+          Groupes
+        </Link>
         
         <Link
           to={communityPath}

@@ -7,6 +7,7 @@ import AdminDevoirsPage from '../pages/dashboard/AdminDevoirsPage'
 import AdminGroupsPage from '../pages/dashboard/AdminGroupsPage'
 import StudentDashboardPage from '../pages/dashboard/StudentDashboardPage'
 import StudentDevoirsPage from '../pages/dashboard/StudentDevoirsPage'
+import StudentGroupsPage from '../pages/dashboard/StudentGroupsPage'
 import CommunityPage from '../pages/CommunityPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicOnlyRoute from './PublicOnlyRoute'
@@ -86,6 +87,14 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['student']}>
               <CommunityPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/student/groupes"
+          element={
+            <ProtectedRoute allowedRoles={['student']}>
+              <StudentGroupsPage />
             </ProtectedRoute>
           }
         />

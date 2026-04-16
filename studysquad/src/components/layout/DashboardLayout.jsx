@@ -15,7 +15,7 @@ function buildNavLinks(userRole) {
   return {
     basePath,
     devoirsPath: `${basePath}/devoirs`,
-    groupesPath: role === 'admin' ? `${basePath}/groupes` : null,
+    groupesPath: `${basePath}/groupes`,
     communityPath: `${basePath}/community`,
   }
 }
