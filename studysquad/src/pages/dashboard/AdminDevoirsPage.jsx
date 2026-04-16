@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 export default function AdminDevoirsPage() {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  const roleLabel = user?.role === 'admin' ? 'Dashboard Admin' : 'Dashboard Etudiant'
 
   const handleLogout = () => {
     logout()
@@ -13,7 +14,12 @@ export default function AdminDevoirsPage() {
   }
 
   return (
-    <DashboardLayout userName={`${user?.name} (admin)`} roleLabel="Dashboard Admin" onLogout={handleLogout}>
+    <DashboardLayout
+      userName={`${user?.name} (${user?.role || 'user'})`}
+      roleLabel={roleLabel}
+      userRole={user?.role}
+      onLogout={handleLogout}
+    >
       <AdminDevoirManager />
     </DashboardLayout>
   )

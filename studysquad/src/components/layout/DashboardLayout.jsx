@@ -3,16 +3,19 @@ import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import DashboardSidebar from './DashboardSidebar'
 import Footer from './Footer'
+import { getDashboardLinks, normalizeRole } from '../../routes/paths'
 
-export default function DashboardLayout({ userName, roleLabel, onLogout, children }) {
+export default function DashboardLayout({ userName, roleLabel, userRole, onLogout, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const role = normalizeRole(userRole)
+  const navLinks = getDashboardLinks(role)
 
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="flex min-h-screen flex-col md:flex-row">
         {/* Sidebar desktop */}
         <div className="hidden md:block">
-          <DashboardSidebar roleLabel={roleLabel} />
+          <DashboardSidebar roleLabel={roleLabel} navLinks={navLinks} />
         </div>
 
         {/* Mobile overlay */}
@@ -33,7 +36,7 @@ export default function DashboardLayout({ userName, roleLabel, onLogout, childre
                 transition={{ duration: 0.2 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <DashboardSidebar roleLabel={roleLabel} onNavigate={() => setSidebarOpen(false)} />
+                <DashboardSidebar roleLabel={roleLabel} navLinks={navLinks} onNavigate={() => setSidebarOpen(false)} />
               </motion.div>
             </motion.div>
           ) : null}

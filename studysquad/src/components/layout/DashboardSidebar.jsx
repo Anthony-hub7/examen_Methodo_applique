@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 
-export default function DashboardSidebar({ roleLabel, onNavigate }) {
+export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
   const location = useLocation()
 
   const basePath = roleLabel?.toLowerCase().includes('admin') ? '/dashboard/admin' : '/dashboard/student'
@@ -60,11 +60,11 @@ export default function DashboardSidebar({ roleLabel, onNavigate }) {
         )}
         
         <Link
-          to={`${basePath}/community`}
+          to={communityPath}
           onClick={handleNavigate}
           className={
             'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
-            (isActive(`${basePath}/community`)
+            (isActive(communityPath)
               ? 'border-white/20 bg-white/10 text-white'
               : 'border-white/10 bg-white/5 text-white/90')
           }

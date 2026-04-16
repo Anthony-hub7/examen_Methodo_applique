@@ -6,9 +6,10 @@ import AdminDashboardPage from '../pages/dashboard/AdminDashboardPage'
 import AdminDevoirsPage from '../pages/dashboard/AdminDevoirsPage'
 import AdminGroupsPage from '../pages/dashboard/AdminGroupsPage'
 import StudentDashboardPage from '../pages/dashboard/StudentDashboardPage'
-import CommunityPage from '../pages/dashboard/CommunityPage'
+import CommunityPage from '../pages/CommunityPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicOnlyRoute from './PublicOnlyRoute'
+import { getCommunityPath, getDashboardBasePath, getDevoirsPath } from './paths'
 
 export default function AppRoutes() {
   return (
@@ -32,7 +33,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/dashboard/admin"
+          path={getDashboardBasePath('admin')}
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminDashboardPage />
@@ -40,7 +41,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/dashboard/admin/community"
+          path={getCommunityPath('admin')}
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <CommunityPage />
@@ -48,7 +49,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/dashboard/admin/devoirs"
+          path={getDevoirsPath('admin')}
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminDevoirsPage />
@@ -72,7 +73,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/dashboard/student/community"
+          path={getCommunityPath('student')}
           element={
             <ProtectedRoute allowedRoles={['student']}>
               <CommunityPage />

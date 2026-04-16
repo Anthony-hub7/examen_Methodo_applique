@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import DashboardLayout from '../../components/layout/DashboardLayout'
-import PostComposer from '../../components/posts/PostComposer'
-import PostFeedItem from '../../components/posts/PostFeedItem'
-import { useAuth } from '../../hooks/useAuth'
-import { usePosts } from '../../hooks/usePosts'
+import DashboardLayout from '../components/layout/DashboardLayout'
+import PostComposer from '../components/posts/PostComposer'
+import PostFeedItem from '../components/posts/PostFeedItem'
+import { useAuth } from '../hooks/useAuth'
+import { usePosts } from '../hooks/usePosts'
 
 export default function CommunityPage() {
   const navigate = useNavigate()
@@ -32,6 +32,7 @@ export default function CommunityPage() {
     <DashboardLayout
       userName={`${user?.name} (${user?.role || 'user'})`}
       roleLabel={isAdmin ? 'Dashboard Admin' : 'Dashboard Etudiant'}
+      userRole={user?.role}
       onLogout={handleLogout}
     >
       <div className="mx-auto w-full max-w-4xl p-5">

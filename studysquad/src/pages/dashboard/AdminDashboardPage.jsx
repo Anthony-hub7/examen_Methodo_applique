@@ -13,7 +13,12 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <DashboardLayout userName={`${user?.name} (admin)`} roleLabel="Dashboard Admin" onLogout={handleLogout}>
+    <DashboardLayout
+      userName={`${user?.name} (${user?.role || 'user'})`}
+      roleLabel="Dashboard Admin"
+      userRole={user?.role}
+      onLogout={handleLogout}
+    >
       <StatsCard />
     </DashboardLayout>
   )

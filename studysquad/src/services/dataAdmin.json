@@ -59,141 +59,98 @@
       "createdAt": "2026-04-16T10:05:00.000Z"
     }
   ],
-
-  "members": [
-    {
-      "id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
-      "name": "Amina Diallo",
-      "email": "amina@example.com",
-      "role": "student",
-      "niveau_etude": "Lycée",
-      "created_at": "2026-02-05T10:00:00.000Z"
-    },
-    {
-      "id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
-      "name": "Mehdi Rahman",
-      "email": "mehdi@example.com",
-      "role": "student",
-      "niveau_etude": "Université",
-      "created_at": "2026-02-15T10:00:00.000Z"
-    },
-    {
-      "id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
-      "name": "Sarah N.",
-      "email": "sarah@example.com",
-      "role": "student",
-      "niveau_etude": "Licence",
-      "created_at": "2026-02-25T10:00:00.000Z"
-    },
-    {
-      "id": "f1e2d3c4-b5a6-4c7d-8e9f-0a1b2c3d4e5f",
-      "name": "Lucas Petit",
-      "email": "lucas@example.com",
-      "role": "student",
-      "niveau_etude": "Master",
-      "created_at": "2026-03-01T10:00:00.000Z"
-    },
-    {
-      "id": "9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d",
-      "name": "Emma Martin",
-      "email": "emma@example.com",
-      "role": "student",
-      "niveau_etude": "Lycée",
-      "created_at": "2026-03-05T10:00:00.000Z"
-    }
-  ],
-
-  "groups": [
-    {
-      "id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
-      "name": "Math Nebula",
-      "description": "Groupe de révision intensif pour les mathématiques",
-      "code_invitation": "4T7H9M",
-      "created_by": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
-      "created_at": "2026-02-10T10:00:00.000Z",
-      "status": "active",
-      "member_count": 3
-    },
-    {
-      "id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
-      "name": "Physics Redshift",
-      "description": "Devoirs de physique et exercices pratiques",
-      "code_invitation": "PH2XKL",
-      "created_by": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
-      "created_at": "2026-02-20T10:00:00.000Z",
-      "status": "active",
-      "member_count": 2
-    },
-    {
-      "id": "8c7d9e6f-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
-      "name": "Literature Club",
-      "description": "Étude et analyse de textes littéraires",
-      "code_invitation": "X2K9WP",
-      "created_by": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
-      "created_at": "2026-03-10T10:00:00.000Z",
-      "status": "disabled",
-      "member_count": 1
-    },
-    {
-      "id": "6b5c4d3e-2f1a-4b0c-9d8e-7f6a5b4c3d2e",
-      "name": "Science Squad",
-      "description": "Groupe pour les sciences expérimentales",
-      "code_invitation": "7M4P3N",
-      "created_by": "f1e2d3c4-b5a6-4c7d-8e9f-0a1b2c3d4e5f",
-      "created_at": "2026-03-08T10:00:00.000Z",
-      "status": "archived",
-      "member_count": 0
-    }
-  ],
-
-  "group_members": [
-    {
-      "id": "gm-001",
-      "member_id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
-      "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
-      "role_devoir": "admin",
-      "actif": true,
-      "joined_at": "2026-02-10T10:00:00.000Z"
-    },
-    {
-      "id": "gm-002",
-      "member_id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
-      "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
-      "role_devoir": "member",
-      "actif": true,
-      "joined_at": "2026-02-11T10:00:00.000Z"
-    },
-    {
-      "id": "gm-003",
-      "member_id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
-      "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
-      "role_devoir": "member",
-      "actif": true,
-      "joined_at": "2026-02-12T10:00:00.000Z"
-    },
-    {
-      "id": "gm-004",
-      "member_id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
-      "group_id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
-      "role_devoir": "admin",
-      "actif": true,
-      "joined_at": "2026-02-20T10:00:00.000Z"
-    },
-    {
-      "id": "gm-005",
-      "member_id": "f1e2d3c4-b5a6-4c7d-8e9f-0a1b2c3d4e5f",
-      "group_id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
-      "role_devoir": "member",
-      "actif": true,
-      "joined_at": "2026-02-21T10:00:00.000Z"
-    },
-    {
-      "id": "gm-006",
-      "member_id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
-      "group_id": "8c7d9e6f-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
-      "role_devoir": "admin",
-      "actif": true,
-      "joined_at": "2026-03-10T10:00:00.000Z"
-    }
-  ]
+  "adminDevoirs": {
+    "members": [
+      {
+        "id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "name": "Amin Diallo",
+        "email": "amina@example.com",
+        "role": "student",
+        "niveau_etude": "Lycee",
+        "created_at": "2025-09-28T12:00:00.000Z"
+      },
+      {
+        "id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
+        "name": "Mehdi Rahman",
+        "email": "mehdi@example.com",
+        "role": "student",
+        "niveau_etude": "Universite",
+        "created_at": "2025-12-17T12:00:00.000Z"
+      },
+      {
+        "id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
+        "name": "Sarah N.",
+        "email": "sarah@example.com",
+        "role": "student",
+        "niveau_etude": "Licence",
+        "created_at": "2026-01-16T12:00:00.000Z"
+      }
+    ],
+    "groups": [
+      {
+        "id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
+        "name": "Math Nebula",
+        "description": "Groupe de revision intensif",
+        "code_invitation": "SQ-4T7H",
+        "created_by": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "created_at": "2025-11-17T12:00:00.000Z"
+      },
+      {
+        "id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
+        "name": "Physics Redshift",
+        "description": "Devoirs de physique et exercices",
+        "code_invitation": "SS-PH2X",
+        "created_by": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
+        "created_at": "2026-01-26T12:00:00.000Z"
+      }
+    ],
+    "devoirs": [
+      {
+        "id": "3b9f2a11-3c2e-4c2a-bc1d-1e2f3a4b5c6d",
+        "titre": "DM - Equations differentielles",
+        "etat": "en cours",
+        "sujet": "Serie 3 (exercices 1 a 6)",
+        "deadline": "2026-04-17T12:00:00.000Z",
+        "priorite": "haute",
+        "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
+        "member_id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "created_at": "2026-04-08T12:00:00.000Z"
+      },
+      {
+        "id": "2a7b6c5d-4e3f-4a1b-8c2d-9e0f1a2b3c4d",
+        "titre": "Fiche - Derivees et limites",
+        "etat": "a faire",
+        "sujet": "Clarifier les notions",
+        "deadline": "2026-04-18T12:00:00.000Z",
+        "priorite": "moyenne",
+        "group_id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
+        "member_id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
+        "created_at": "2026-04-12T12:00:00.000Z"
+      },
+      {
+        "id": "6c5b4a3f-2d1c-4b3a-9e8f-7d6c5b4a3f2e",
+        "titre": "Mini projet - IA et classification",
+        "etat": "en cours",
+        "sujet": "Ecrire un petit pipeline",
+        "deadline": "2026-04-15T12:00:00.000Z",
+        "priorite": "haute",
+        "group_id": null,
+        "member_id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
+        "created_at": "2026-03-27T12:00:00.000Z"
+      },
+      {
+        "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+        "titre": "Exercices - Cinematique",
+        "etat": "termine",
+        "sujet": "Corrections et recap",
+        "deadline": "2026-04-11T12:00:00.000Z",
+        "priorite": "faible",
+        "group_id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
+        "member_id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "created_at": "2026-03-17T12:00:00.000Z"
+      }
+    ],
+    "notifications": [],
+    "remindersSent": 0
+  }
 }

@@ -13,7 +13,12 @@ export default function StudentDashboardPage() {
   }
 
   return (
-    <DashboardLayout userName={`${user?.name} (etudiant)`} roleLabel="Dashboard Etudiant" onLogout={handleLogout}>
+    <DashboardLayout
+      userName={`${user?.name} (${user?.role || 'etudiant'})`}
+      roleLabel="Dashboard Etudiant"
+      userRole={user?.role}
+      onLogout={handleLogout}
+    >
       <ClientDash />
     </DashboardLayout>
   )
