@@ -167,7 +167,7 @@ export default function LandingPage() {
               {audioEnabled ? 'Couper ambiance' : 'Activer ambiance'}
             </button>
             <Link
-              to="/dashboard"
+              to="/login"
               className="rounded-full bg-brand-red px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90 sm:px-5 sm:text-sm"
             >
               Explorer
@@ -225,7 +225,7 @@ export default function LandingPage() {
               {audioEnabled ? 'Couper ambiance' : 'Activer ambiance'}
             </button>
             <Link
-              to="/dashboard"
+              to="/login"
               onClick={() => setIsMobileMenuOpen(false)}
               className="rounded-xl bg-brand-red px-4 py-2 text-center text-sm font-semibold text-white"
             >
@@ -308,7 +308,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
-                  to="/signup"
+                  to="/signin"
                   className="rounded-full bg-brand-red px-5 py-3 text-sm font-semibold text-white shadow-glow sm:px-6 sm:text-base"
                 >
                   Commencer maintenant
@@ -390,7 +390,7 @@ export default function LandingPage() {
               Suis tes devoirs, collabore avec ton groupe et active l aide SOS quand tu bloques sur un exercice.
             </p>
             <Link
-              to="/signup"
+              to="/signin"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-brand-red px-6 py-3 font-semibold text-white shadow-glow"
             >
               Creer mon compte
