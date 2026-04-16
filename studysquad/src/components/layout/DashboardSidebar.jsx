@@ -1,4 +1,13 @@
+import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
+
 export default function DashboardSidebar({ roleLabel }) {
+  const { user } = useAuth()
+  const location = useLocation()
+
+  const basePath = user?.role === 'admin' ? '/dashboard/admin' : '/dashboard/student'
+  const isActive = (path) => location.pathname === path
+
   return (
     <aside className="w-full max-w-xs border-r border-white/10 bg-[#121212] p-4 text-white md:min-h-screen">
       <div className="mb-6">
@@ -7,18 +16,26 @@ export default function DashboardSidebar({ roleLabel }) {
       </div>
 
       <nav className="space-y-2">
-        <button
-          type="button"
-          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm font-medium text-white/90"
+        <Link
+          to={basePath}
+          className={
+            'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
+            (isActive(basePath) ? 'border-white/20 bg-white/10 text-white' : 'border-white/10 bg-white/5 text-white/90')
+          }
         >
-          Devoirs
-        </button>
-        <button
-          type="button"
-          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm font-medium text-white/90"
+          Accueil
+        </Link>
+        <Link
+          to={`${basePath}/community`}
+          className={
+            'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
+            (isActive(`${basePath}/community`)
+              ? 'border-white/20 bg-white/10 text-white'
+              : 'border-white/10 bg-white/5 text-white/90')
+          }
         >
-          Groupe
-        </button>
+          Communauté
+        </Link>
       </nav>
     </aside>
   )

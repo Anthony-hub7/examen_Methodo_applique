@@ -26,5 +26,37 @@
       "nbr_devoir_termine": 7,
       "nbr_devoir_en_retard": 2
     }
-  }
+  },
+  "posts": [
+    {
+      "id": "p1",
+      "type": "help_devoir",
+      "author": {
+        "id": "1",
+        "name": "Admin",
+        "email": "admin@test.com",
+        "role": "admin"
+      },
+      "content": "Je bloque sur l'exercice 3 du devoir de maths (dérivées). Quelqu'un peut m'expliquer la démarche ?",
+      "target": {
+        "devoir": "Devoir de Maths - Exercice 3"
+      },
+      "createdAt": "2026-04-16T09:30:00.000Z"
+    },
+    {
+      "id": "p2",
+      "type": "recrutement_groupe",
+      "author": {
+        "id": "2",
+        "name": "client",
+        "email": "client@test.com",
+        "role": "client"
+      },
+      "content": "On cherche 2 membres pour finaliser le devoir en groupe. Vous êtes dispo ce soir ?",
+      "target": {
+        "groupe": "Groupe Participation - Devoir à finaliser"
+      },
+      "createdAt": "2026-04-16T10:05:00.000Z"
+    }
+  ]
 }

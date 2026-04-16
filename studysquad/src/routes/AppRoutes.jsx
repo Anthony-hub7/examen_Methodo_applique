@@ -4,6 +4,7 @@ import Signup from '../pages/auth/Signup'
 import Landing from '../pages/landing/LandingPage'
 import AdminDashboardPage from '../pages/dashboard/AdminDashboardPage'
 import StudentDashboardPage from '../pages/dashboard/StudentDashboardPage'
+import CommunityPage from '../pages/dashboard/CommunityPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicOnlyRoute from './PublicOnlyRoute'
 
@@ -37,10 +38,26 @@ export default function AppRoutes() {
           }
         />
         <Route
+          path="/dashboard/admin/community"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <CommunityPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/dashboard/student"
           element={
             <ProtectedRoute allowedRoles={['student']}>
               <StudentDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/student/community"
+          element={
+            <ProtectedRoute allowedRoles={['student']}>
+              <CommunityPage />
             </ProtectedRoute>
           }
         />
