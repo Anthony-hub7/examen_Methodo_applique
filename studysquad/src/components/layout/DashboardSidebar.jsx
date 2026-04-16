@@ -3,10 +3,11 @@ import { Link, useLocation } from 'react-router-dom'
 export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
   const location = useLocation()
 
-  const basePath = roleLabel?.toLowerCase().includes('admin') ? '/dashboard/admin' : '/dashboard/student'
-  const devoirsPath = roleLabel?.toLowerCase().includes('admin') ? `${basePath}/devoirs` : basePath
-  const groupesPath = `${basePath}/groupes`
-  const isAdmin = roleLabel?.toLowerCase().includes('admin')
+  const basePath = navLinks?.basePath || '/dashboard/student'
+  const devoirsPath = navLinks?.devoirsPath || basePath
+  const groupesPath = navLinks?.groupesPath
+  const communityPath = navLinks?.communityPath || `${basePath}/community`
+  const isAdmin = Boolean(groupesPath)
   const normalizePath = (p) => String(p).split('#')[0]
   const isActive = (path) => location.pathname === normalizePath(path)
 
@@ -44,7 +45,7 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
             Devoirs
           </Link>
         
-        {isAdmin && (
+        {isAdmin ? (
           <Link
             to={groupesPath}
             onClick={handleNavigate}
@@ -57,7 +58,7 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
           >
             Groupes
           </Link>
-        )}
+        ) : null}
         
         <Link
           to={communityPath}

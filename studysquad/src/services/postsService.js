@@ -33,18 +33,18 @@ function normalizePost(raw) {
   const author =
     raw.author && typeof raw.author === 'object'
       ? {
-          id: raw.author.id ? String(raw.author.id) : '',
-          name: raw.author.name ? String(raw.author.name) : 'Anonyme',
-          email: raw.author.email ? String(raw.author.email) : '',
-          role: raw.author.role ? String(raw.author.role) : '',
-        }
+        id: raw.author.id ? String(raw.author.id) : '',
+        name: raw.author.name ? String(raw.author.name) : 'Anonyme',
+        email: raw.author.email ? String(raw.author.email) : '',
+        role: raw.author.role ? String(raw.author.role) : '',
+      }
       : null
 
   const likes = Array.isArray(raw.likes) ? raw.likes.map((x) => String(x)) : []
   const comments = Array.isArray(raw.comments)
     ? raw.comments
-        .map((c) => normalizeComment(c))
-        .filter(Boolean)
+      .map((c) => normalizeComment(c))
+      .filter(Boolean)
     : []
 
   return {
@@ -68,11 +68,11 @@ function normalizeComment(raw) {
   const author =
     raw.author && typeof raw.author === 'object'
       ? {
-          id: raw.author.id ? String(raw.author.id) : '',
-          name: raw.author.name ? String(raw.author.name) : 'Anonyme',
-          email: raw.author.email ? String(raw.author.email) : '',
-          role: raw.author.role ? String(raw.author.role) : '',
-        }
+        id: raw.author.id ? String(raw.author.id) : '',
+        name: raw.author.name ? String(raw.author.name) : 'Anonyme',
+        email: raw.author.email ? String(raw.author.email) : '',
+        role: raw.author.role ? String(raw.author.role) : '',
+      }
       : null
 
   return {
@@ -131,14 +131,16 @@ export const postsService = {
     return sortByCreatedAtDesc(filtered)
   },
 
-  createPost({ type, content, targetText, author }) {
+  createPost({ type, content, targetText, targetId, author }) {
     if (!type || !content) throw new Error('Champs requis manquants.')
 
     const target =
       typeof targetText === 'string' && targetText.trim().length > 0
         ? type === 'help_devoir'
-          ? { devoir: targetText.trim() }
-          : { groupe: targetText.trim() }
+          ? { devoir: targetText.trim(), devoirId: targetId || null }
+          : type === 'recrutement_groupe'
+            ? { groupe: targetText.trim(), groupeId: targetId || null }
+            : { texte: targetText.trim() }
         : undefined
 
     const nextPost = {
@@ -147,11 +149,11 @@ export const postsService = {
       content: content.trim(),
       author: author
         ? {
-            id: author.id,
-            name: author.name,
-            email: author.email,
-            role: author.role,
-          }
+          id: author.id,
+          name: author.name,
+          email: author.email,
+          role: author.role,
+        }
         : null,
       createdAt: new Date().toISOString(),
       target,
@@ -206,11 +208,11 @@ export const postsService = {
         content: String(content).trim(),
         author: author
           ? {
-              id: author.id,
-              name: author.name,
-              email: author.email,
-              role: author.role,
-            }
+            id: author.id,
+            name: author.name,
+            email: author.email,
+            role: author.role,
+          }
           : null,
         createdAt: new Date().toISOString(),
         isActive: true,

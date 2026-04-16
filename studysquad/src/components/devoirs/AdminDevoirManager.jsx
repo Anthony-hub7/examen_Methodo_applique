@@ -25,6 +25,8 @@ export default function AdminDevoirManager() {
     groupById,
     updateDevoir,
     markAsDone,
+    createDevoir,
+    deleteDevoir,
     sendReminders,
     uploadAttachments,
     removeAttachment,
@@ -35,22 +37,47 @@ export default function AdminDevoirManager() {
 
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [isCreating, setIsCreating] = useState(false)
   const [viewerOpen, setViewerOpen] = useState(false)
   const [viewerAttachment, setViewerAttachment] = useState(null)
 
   const openEdit = (devoir) => {
+    setIsCreating(false)
     setEditing({ ...devoir })
+    setModalOpen(true)
+  }
+
+  const openCreate = () => {
+    const fallbackMemberId = members[0]?.id || ''
+    const fallbackGroupId = groups[0]?.id || null
+    setIsCreating(true)
+    setEditing({
+      titre: '',
+      etat: 'a faire',
+      sujet: '',
+      deadline: null,
+      priorite: 'moyenne',
+      group_id: fallbackGroupId,
+      member_id: fallbackMemberId,
+      attachments: [],
+    })
     setModalOpen(true)
   }
 
   const closeEdit = () => {
     setModalOpen(false)
+    setIsCreating(false)
     setEditing(null)
   }
 
   const applyEdit = () => {
     if (!editing) return
-    updateDevoir(editing.id, editing)
+    if (isCreating) {
+      const created = createDevoir(editing)
+      if (!created) return
+    } else {
+      updateDevoir(editing.id, editing)
+    }
     closeEdit()
   }
 
@@ -71,7 +98,7 @@ export default function AdminDevoirManager() {
   }
 
   const handleFileUpload = async (event) => {
-    if (!editing) return
+    if (!editing || isCreating) return
     const files = event.target.files
     if (!files || files.length === 0) return
     const snapshot = await uploadAttachments(editing.id, files)
@@ -92,6 +119,15 @@ export default function AdminDevoirManager() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={openCreate}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-brand-red/70 hover:bg-brand-red/15"
+            >
+              <Icon icon="solar:add-circle-bold" width={18} />
+              Creer un devoir
+            </button>
+
             <button
               type="button"
               onClick={sendReminders}
@@ -271,6 +307,19 @@ export default function AdminDevoirManager() {
                             <Icon icon="solar:check-read-bold" width={18} />
                             Marquer termine
                           </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const ok = window.confirm(`Supprimer le devoir \"${devoir.titre}\" ?`)
+                              if (!ok) return
+                              deleteDevoir(devoir.id)
+                            }}
+                            className="inline-flex items-center gap-2 rounded-xl border border-red-500/50 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-500/20"
+                          >
+                            <Icon icon="solar:trash-bin-trash-bold" width={18} />
+                            Supprimer
+                          </button>
                         </div>
                       </div>
                     </motion.article>
@@ -297,7 +346,7 @@ export default function AdminDevoirManager() {
             <ul className="space-y-2">
               {notifications.slice(0, 10).map((notification) => (
                 <li
-                  key={notification.id}
+                  key={notification.id ?? notification.created_at}
                   className="flex flex-col gap-1 rounded-xl border border-white/10 bg-black/20 p-3 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0">
@@ -338,8 +387,10 @@ export default function AdminDevoirManager() {
               >
                 <div className="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-white/95">Attribuer / Reaffecter</p>
-                    <p className="truncate text-xs text-white/60">{editing.titre}</p>
+                    <p className="truncate text-sm font-semibold text-white/95">
+                      {isCreating ? 'Creer un devoir' : 'Attribuer / Reaffecter'}
+                    </p>
+                    <p className="truncate text-xs text-white/60">{editing.titre || 'Nouveau devoir'}</p>
                   </div>
                   <button
                     type="button"
@@ -352,6 +403,18 @@ export default function AdminDevoirManager() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 p-4 sm:p-6 md:grid-cols-2">
+                  <label className="block md:col-span-2">
+                    <span className="mb-1 block text-sm text-white/75">Titre <span className="text-brand-red">*</span></span>
+                    <input
+                      type="text"
+                      value={editing.titre || ''}
+                      onChange={(e) => setEditing((prev) => ({ ...prev, titre: e.target.value }))}
+                      placeholder="Ex: DM - Equations différentielles..."
+                      className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                      autoFocus
+                    />
+                  </label>
+
                   <label className="block">
                     <span className="mb-1 block text-sm text-white/75">Membre</span>
                     <select
@@ -459,10 +522,16 @@ export default function AdminDevoirManager() {
                           accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp,.zip"
                           className="hidden"
                           onChange={handleFileUpload}
-                          disabled={uploading}
+                          disabled={uploading || isCreating}
                         />
                       </label>
                     </div>
+
+                    {isCreating ? (
+                      <p className="mb-3 text-xs text-white/60">
+                        Enregistre d'abord le devoir pour pouvoir ajouter des supports.
+                      </p>
+                    ) : null}
 
                     {!editing.attachments || editing.attachments.length === 0 ? (
                       <p className="text-xs text-white/65">Aucun support pour ce devoir.</p>
@@ -535,7 +604,7 @@ export default function AdminDevoirManager() {
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-red px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
                   >
                     <Icon icon="solar:check-read-bold" width={18} />
-                    Enregistrer
+                    {isCreating ? 'Creer' : 'Enregistrer'}
                   </button>
                 </div>
               </motion.div>

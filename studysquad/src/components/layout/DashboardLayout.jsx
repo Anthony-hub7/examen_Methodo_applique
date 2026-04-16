@@ -3,12 +3,26 @@ import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import DashboardSidebar from './DashboardSidebar'
 import Footer from './Footer'
-import { getDashboardLinks, normalizeRole } from '../../routes/paths'
+
+function normalizeRole(role) {
+  return role === 'admin' ? 'admin' : 'student'
+}
+
+function buildNavLinks(userRole) {
+  const role = normalizeRole(userRole)
+  const basePath = role === 'admin' ? '/dashboard/admin' : '/dashboard/student'
+
+  return {
+    basePath,
+    devoirsPath: `${basePath}/devoirs`,
+    groupesPath: role === 'admin' ? `${basePath}/groupes` : null,
+    communityPath: `${basePath}/community`,
+  }
+}
 
 export default function DashboardLayout({ userName, roleLabel, userRole, onLogout, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const role = normalizeRole(userRole)
-  const navLinks = getDashboardLinks(role)
+  const navLinks = buildNavLinks(userRole)
 
   return (
     <div className="min-h-screen bg-black text-white">

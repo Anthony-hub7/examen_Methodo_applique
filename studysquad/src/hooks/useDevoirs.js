@@ -113,6 +113,32 @@ export function useDevoirs() {
     }
   }, [applySnapshot])
 
+  const createDevoir = useCallback(
+    (payload) => {
+      try {
+        const snapshot = devoirService.createDevoir(payload)
+        applySnapshot(snapshot)
+        return snapshot
+      } catch (err) {
+        setError(err?.message || 'Creation du devoir impossible.')
+        return null
+      }
+    },
+    [applySnapshot],
+  )
+
+  const deleteDevoir = useCallback(
+    (devoirId) => {
+      try {
+        const snapshot = devoirService.deleteDevoir(devoirId)
+        applySnapshot(snapshot)
+      } catch {
+        setError('Suppression du devoir impossible.')
+      }
+    },
+    [applySnapshot],
+  )
+
   const uploadAttachments = useCallback(
     async (devoirId, files) => {
       setUploading(true)
@@ -166,6 +192,8 @@ export function useDevoirs() {
     loadData,
     updateDevoir,
     markAsDone,
+    createDevoir,
+    deleteDevoir,
     sendReminders,
     uploadAttachments,
     removeAttachment,

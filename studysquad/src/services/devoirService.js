@@ -179,6 +179,12 @@ function validateFile(file) {
   }
 }
 
+function normalizeIsoDate(input) {
+  if (!input) return null
+  const date = new Date(input)
+  return Number.isNaN(date.getTime()) ? null : date.toISOString()
+}
+
 export const devoirService = {
   getAdminSnapshot() {
     return ensureSnapshot()
@@ -198,6 +204,35 @@ export const devoirService = {
 
   markAsDone(devoirId) {
     return this.updateDevoir(devoirId, { etat: 'termine' })
+  },
+
+  createDevoir(payload = {}) {
+    const snapshot = ensureSnapshot()
+    const fallbackMemberId = snapshot.members[0]?.id || ''
+
+    const titre = String(payload.titre || '').trim()
+    if (!titre) throw new Error('Le titre du devoir est obligatoire.')
+
+    const nextDevoir = {
+      id: newId(),
+      titre,
+      etat: payload.etat || 'a faire',
+      sujet: String(payload.sujet || '').trim(),
+      deadline: normalizeIsoDate(payload.deadline),
+      priorite: payload.priorite || 'moyenne',
+      group_id: payload.group_id || null,
+      member_id: payload.member_id || fallbackMemberId,
+      created_at: nowIso(),
+      attachments: [],
+    }
+
+    return saveSnapshot({ ...snapshot, devoirs: [nextDevoir, ...snapshot.devoirs] })
+  },
+
+  deleteDevoir(devoirId) {
+    const snapshot = ensureSnapshot()
+    const nextDevoirs = snapshot.devoirs.filter((devoir) => String(devoir.id) !== String(devoirId))
+    return saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
   },
 
   async addAttachments(devoirId, files = []) {
