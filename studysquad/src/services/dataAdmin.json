@@ -1,0 +1,30 @@
+{
+  "user": {
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@test.com",
+    "role": "admin",
+    "password" : "admin",
+    "isLoggedIn": true
+  },
+  "client": {
+    "id": 2,
+    "name": "client",
+    "email": "client@test.com",
+    "role": "client",
+    "password": "client",
+    "isLoggedIn": true
+  },
+
+  "dashboard": {
+    "type": "admin",
+    "stats": {
+      "nbr_clients" : 77,
+      "nbr_devoir": 12,
+      "nbr_groupe_participation": 5,
+      "nbr_devoir_sans_groupe": 3,
+      "nbr_devoir_termine": 7,
+      "nbr_devoir_en_retard": 2
+    }
+  }
+}

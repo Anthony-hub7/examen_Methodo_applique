@@ -7,3 +7,6 @@ docker compose exec web npm install lucide-react
 
 -installer framer-motion pour les animations
 docker compose exec web npm install framer-motion
+
+- dashboard 3D
+docker compose exec web npm install three @react-three/fiber @react-three/drei

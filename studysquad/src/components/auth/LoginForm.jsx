@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { supabase } from "../../services/supabaseClient"
 import { Eye, EyeOff } from "lucide-react"
 import Ghost from "../ui/Ghost"
+import data from "../../services/dataAdmin.json"
+
 
 export default function LoginForm() {
   const [email, setEmail] = useState("")
@@ -10,23 +12,67 @@ export default function LoginForm() {
   const [msg, setMsg] = useState("")
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
+  // const handleLogin = async (e) => {
+  //   e.preventDefault()
 
-    setMsg("Connexion...")
+  //   setMsg("Connexion...")
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+  //   const { error } = await supabase.auth.signInWithPassword({
+  //     email,
+  //     password,
+  //   })
 
-    if (error) {
-      setMsg(error.message)
-    } else {
-      setMsg("Connexion réussie 👍")
-    }
+  //   if (error) {
+  //     setMsg(error.message)
+  //   } else {
+  //     setMsg("Connexion réussie 👍")
+  //   }
+  // }
+  const navigate = useNavigate()
+// const handleLogin = (e) => {
+//   e.preventDefault()
+
+//   const user = data.user || data.client
+//   if (!user) {
+//     setMsg("Email ou mot de passe incorrect")
+//     console.log("Email ou mot de passe incorrect");
+//     return
+//   }
+
+//   setMsg("Connexion réussie 👍")
+//     console.log("Connexion réussie 👍");
+
+// if (email === user.email && password === user.password) {
+//   console.log("OK")
+//   if(user.role == "admin") navigate("/card")
+//   else navigate ("/clientStat")
+// } else {
+//   setMsg("Login incorrect")
+// }
+// }
+
+const handleLogin = (e) => {
+  e.preventDefault()
+
+  const users = [data.user, data.client]
+
+  const foundUser = users.find(
+    (u) => u.email === email && u.password === password
+  )
+
+  if (!foundUser) {
+    setMsg("Login incorrect")
+    return
   }
 
+  setMsg("Connexion réussie 👍")
+
+  if (foundUser.role === "admin") {
+    navigate("/card")
+  } else {
+    navigate("/clientDash")
+  }
+}
 
   //ghost
   const [ghostMode, setGhostMode] = useState("idle")
@@ -39,7 +85,6 @@ const handleMouseMove = (e) => {
   setMousePos({ x, y })
 }
 
-const navigate = useNavigate()
   return (
   <div style={styles.container}>
 
@@ -63,7 +108,14 @@ const navigate = useNavigate()
 
       {/* RIGHT FORM */}
       <div style={styles.right}>
-        <form onSubmit={handleLogin} style={styles.form}>
+        <form
+        //  onSubmit={handleLogin}
+        onSubmit={(e) => {
+    console.log("FORM SUBMIT")
+    handleLogin(e)
+  }}
+        
+        style={styles.form}>
           <img src="/Logo.png" style={{ width: "90%" }} />
 
           <input

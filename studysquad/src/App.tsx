@@ -3,6 +3,8 @@ import {BrowserRouter,Routes,Route,Navigate} from "react-router-dom"
 import { supabase } from './services/supabaseClient'
 import Login from "./pages/auth/Login"
 import Signup from './pages/auth/Signup'
+import StatsCard from './components/dashboard/StatsCard'
+import ClientDash from './components/dashboard/ClientDash'
 // import Ghost from './components/ui/Ghost'
 
 function App() {
@@ -41,6 +43,11 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signin" element={<Signup />} />
+        <Route path="/card" element={<StatsCard />} />
+        <Route path="/clientDash" element={<ClientDash />} />
+
+
+        
 
       </Routes>
     </BrowserRouter>
