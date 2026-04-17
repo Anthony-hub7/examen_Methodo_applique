@@ -23,3 +23,21 @@ body {
 #root {
   min-height: 100vh;
 }
+
+@layer components {
+  .dashboard-panel {
+    @apply rounded-2xl border border-white/15 backdrop-blur-md;
+    background-color: rgba(10, 10, 10, 0.82);
+  }
+
+  .dashboard-subpanel {
+    @apply rounded-xl border border-white/10 backdrop-blur-sm;
+    background-color: rgba(26, 26, 26, 0.72);
+  }
+
+  .dashboard-input {
+    @apply rounded-xl border border-white/15 text-white outline-none transition;
+    @apply focus:border-brand-red/60;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}

@@ -13,9 +13,9 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
   const handleNavigate = () => onNavigate?.()
 
   return (
-    <aside className="h-full w-full max-w-xs overflow-y-auto border-r border-white/10 bg-[#121212] p-4 text-white md:min-h-screen">
+    <aside className="h-full w-full max-w-xs overflow-y-auto border-r border-white/10 bg-brand-dark/80 p-4 text-white backdrop-blur-md md:min-h-screen">
       <div className="mb-6">
-        <p className="text-xs uppercase tracking-wide text-white/50">Navigation</p>
+        <p className="text-xs uppercase tracking-[0.22em] text-brand-red/70">Navigation</p>
         <h2 className="mt-1 text-lg font-semibold">{roleLabel}</h2>
       </div>
 
@@ -25,7 +25,9 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
           onClick={handleNavigate}
           className={
             'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
-            (isActive(basePath) ? 'border-white/20 bg-white/10 text-white' : 'border-white/10 bg-white/5 text-white/90')
+            (isActive(basePath)
+              ? 'border-brand-red/50 bg-brand-red/15 text-white shadow-glow'
+              : 'border-white/10 bg-brand-soft/65 text-white/90 hover:border-brand-red/30 hover:bg-brand-soft/85')
           }
         >
           Accueil
@@ -37,8 +39,8 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
             className={
               'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
               (isActive(devoirsPath)
-                ? 'border-white/20 bg-white/10 text-white'
-                : 'border-white/10 bg-white/5 text-white/90')
+                ? 'border-brand-red/50 bg-brand-red/15 text-white shadow-glow'
+                : 'border-white/10 bg-brand-soft/65 text-white/90 hover:border-brand-red/30 hover:bg-brand-soft/85')
             }
           >
             Devoirs
@@ -50,8 +52,8 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
           className={
             'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
             (isActive(groupesPath)
-              ? 'border-white/20 bg-white/10 text-white'
-              : 'border-white/10 bg-white/5 text-white/90')
+              ? 'border-brand-red/50 bg-brand-red/15 text-white shadow-glow'
+              : 'border-white/10 bg-brand-soft/65 text-white/90 hover:border-brand-red/30 hover:bg-brand-soft/85')
           }
         >
           Groupes
@@ -63,8 +65,8 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
           className={
             'block w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ' +
             (isActive(communityPath)
-              ? 'border-white/20 bg-white/10 text-white'
-              : 'border-white/10 bg-white/5 text-white/90')
+              ? 'border-brand-red/50 bg-brand-red/15 text-white shadow-glow'
+              : 'border-white/10 bg-brand-soft/65 text-white/90 hover:border-brand-red/30 hover:bg-brand-soft/85')
           }
         >
           Communauté

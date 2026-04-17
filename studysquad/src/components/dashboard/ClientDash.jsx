@@ -116,7 +116,10 @@ export default function ClientDash() {
     <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-xl font-bold tracking-tight">Dashboard client</h2>
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Vue etudiant</p>
+            <h2 className="mt-2 text-xl font-bold tracking-tight text-white">Dashboard client</h2>
+          </div>
 
           {/* FILTER */}
           <div className="flex items-center gap-2">
@@ -127,7 +130,7 @@ export default function ClientDash() {
               id="dash-filter"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90 outline-none focus:border-brand-red/60"
+              className="dashboard-input px-3 py-2 text-sm text-white/90"
             >
               <option value="jour">Jour</option>
               <option value="semaine">Semaine</option>
@@ -145,25 +148,25 @@ export default function ClientDash() {
           transition={{ duration: 0.4 }}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="dashboard-panel p-4">
             <ClipboardList className="text-brand-red" size={18} />
             <p className="mt-2 text-sm text-white/75">Devoirs terminés</p>
             <h3 className="mt-2 text-2xl font-bold">{current.devoirs.termines}</h3>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="dashboard-panel p-4">
             <Users className="text-brand-red" size={18} />
             <p className="mt-2 text-sm text-white/75">Groupes actifs</p>
             <h3 className="mt-2 text-2xl font-bold">{current.groupes.actifs}</h3>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="dashboard-panel p-4">
             <AlertTriangle className="text-brand-red" size={18} />
             <p className="mt-2 text-sm text-white/75">Sans groupe</p>
             <h3 className="mt-2 text-2xl font-bold">{current.devoirs.sans_groupe}</h3>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="dashboard-panel p-4">
             <CheckCircle className="text-brand-red" size={18} />
             <p className="mt-2 text-sm text-white/75">En retard</p>
             <h3 className="mt-2 text-2xl font-bold">{current.devoirs.en_retard}</h3>
@@ -176,7 +179,7 @@ export default function ClientDash() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
-            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+            className="dashboard-panel p-5"
           >
             <h3 className="mb-3 text-base font-semibold text-white/95">Statut des devoirs</h3>
             <div className="relative h-72 sm:h-80">
@@ -199,7 +202,7 @@ export default function ClientDash() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
-            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+            className="dashboard-panel p-5"
           >
             <h3 className="mb-3 text-base font-semibold text-white/95">Groupes</h3>
             <div className="relative h-72 sm:h-80">
@@ -225,7 +228,7 @@ export default function ClientDash() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5"
+          className="dashboard-panel mt-4 p-5"
         >
           <div className="mb-3 flex items-center gap-2">
             <MessageSquare className="text-brand-red" size={18} />
@@ -261,7 +264,7 @@ export default function ClientDash() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5"
+          className="dashboard-panel mt-4 p-5"
         >
           <div className="mb-3 flex items-center gap-2">
             <Trophy className="text-brand-red" size={18} />

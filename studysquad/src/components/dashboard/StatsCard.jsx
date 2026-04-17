@@ -141,18 +141,21 @@ export default function Dashboard() {
   return (
     <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
-        <h2 className="mb-5 text-xl font-bold tracking-tight">📊 Dashboard Admin</h2>
+        <div className="mb-5">
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Vue administrateur</p>
+          <h2 className="mt-2 text-xl font-bold tracking-tight text-white">Dashboard Admin</h2>
+        </div>
 
         {/* TOP STATS */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="dashboard-panel p-5">
             <h3 className="mb-3 text-base font-semibold text-white/95">Vue globale</h3>
             <div className="relative h-72 sm:h-80">
               <Bar options={commonChartOptions} data={themedBarData} />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="dashboard-panel p-5">
             <h3 className="mb-3 text-base font-semibold text-white/95">État des devoirs</h3>
             <div className="relative h-72 sm:h-80">
               <Doughnut options={commonChartOptions} data={themedDoughnutData} />
@@ -161,7 +164,7 @@ export default function Dashboard() {
         </div>
 
         {/* SWITCH + LINE */}
-        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div className="dashboard-panel mt-4 p-5">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex gap-2">
               <button
@@ -171,7 +174,7 @@ export default function Dashboard() {
                   "rounded-xl border px-3 py-2 text-sm transition " +
                   (view === "semaine"
                     ? "border-brand-red/60 bg-brand-red/20 text-white"
-                    : "border-white/10 bg-white/5 text-white/80 hover:border-brand-red/40")
+                    : "border-white/10 bg-brand-soft/70 text-white/80 hover:border-brand-red/40")
                 }
               >
                 Semaine
@@ -183,7 +186,7 @@ export default function Dashboard() {
                   "rounded-xl border px-3 py-2 text-sm transition " +
                   (view === "mois"
                     ? "border-brand-red/60 bg-brand-red/20 text-white"
-                    : "border-white/10 bg-white/5 text-white/80 hover:border-brand-red/40")
+                    : "border-white/10 bg-brand-soft/70 text-white/80 hover:border-brand-red/40")
                 }
               >
                 Mois

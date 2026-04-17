@@ -112,7 +112,8 @@ export default function AdminDevoirManager() {
       <div className="mx-auto w-full max-w-6xl">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Gestion des devoirs (Admin)</h2>
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Pilotage admin</p>
+            <h2 className="mt-2 text-xl font-bold tracking-tight">Gestion des devoirs (Admin)</h2>
             <p className="mt-1 text-sm text-white/70">
               Donnees dynamiques via service + hook (mock localStorage / dataAdmin.json).
             </p>
@@ -122,7 +123,7 @@ export default function AdminDevoirManager() {
             <button
               type="button"
               onClick={openCreate}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-brand-red/70 hover:bg-brand-red/15"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-brand-soft/75 px-4 py-2 text-sm font-semibold text-white transition hover:border-brand-red/70 hover:bg-brand-red/15"
             >
               <Icon icon="solar:add-circle-bold" width={18} />
               Creer un devoir
@@ -137,7 +138,7 @@ export default function AdminDevoirManager() {
               Relancer avec rappels
             </button>
 
-            <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm">
+            <div className="dashboard-subpanel px-4 py-2 text-sm">
               <span className="text-white/70">Rappels envoyes:</span>{' '}
               <span className="font-bold text-white">{remindersSent}</span>
             </div>
@@ -149,7 +150,7 @@ export default function AdminDevoirManager() {
         ) : null}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <aside className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <aside className="dashboard-panel p-4">
             <h3 className="mb-3 text-base font-semibold">Filtres</h3>
 
             <div className="space-y-3">
@@ -160,7 +161,7 @@ export default function AdminDevoirManager() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Titre, sujet, membre, groupe..."
-                  className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                  className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                 />
               </label>
 
@@ -169,7 +170,7 @@ export default function AdminDevoirManager() {
                 <select
                   value={filterState}
                   onChange={(e) => setFilterState(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                  className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                 >
                   <option value="tous">Tous</option>
                   <option value="en_retard">En retard</option>
@@ -184,7 +185,7 @@ export default function AdminDevoirManager() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                    className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                   >
                     <option value="deadline">Deadline</option>
                     <option value="priorite">Priorite</option>
@@ -196,7 +197,7 @@ export default function AdminDevoirManager() {
                   <select
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                    className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                   >
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -205,7 +206,7 @@ export default function AdminDevoirManager() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-3">
+            <div className="dashboard-subpanel mt-4 p-3">
               <p className="text-xs font-semibold text-white/90">Note</p>
               <p className="mt-1 text-xs text-white/70">
                 Les devoirs en "a faire" sont affiches en "En cours" pour simplifier la lecture.
@@ -213,7 +214,7 @@ export default function AdminDevoirManager() {
             </div>
           </aside>
 
-          <section className="rounded-2xl border border-white/10 bg-white/5 p-4 lg:col-span-2">
+          <section className="dashboard-panel p-4 lg:col-span-2">
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="text-base font-semibold">Voir tous les devoirs</h3>
               <div className="text-sm text-white/70">
@@ -223,13 +224,13 @@ export default function AdminDevoirManager() {
             </div>
 
             {loading ? (
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center text-sm text-white/70">
+              <div className="dashboard-subpanel p-5 text-center text-sm text-white/70">
                 Chargement des devoirs...
               </div>
             ) : (
               <div className="space-y-3">
                 {filteredDevoirs.length === 0 ? (
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center text-sm text-white/70">
+                  <div className="dashboard-subpanel p-5 text-center text-sm text-white/70">
                     Aucun devoir ne correspond aux filtres.
                   </div>
                 ) : null}
@@ -252,7 +253,7 @@ export default function AdminDevoirManager() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.25 }}
-                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                      className="dashboard-subpanel p-4"
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
@@ -264,7 +265,7 @@ export default function AdminDevoirManager() {
                               <Icon icon="solar:bolt-circle-bold" width={14} />
                               {computedState.label}
                             </span>
-                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/75">
+                            <span className="inline-flex items-center rounded-full border border-white/10 bg-brand-black/35 px-3 py-1 text-xs text-white/75">
                               Priorite: <b className="ml-1 text-white/90">{devoir.priorite}</b>
                             </span>
                           </div>
@@ -293,7 +294,7 @@ export default function AdminDevoirManager() {
                           <button
                             type="button"
                             onClick={() => openEdit(devoir)}
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-brand-red/60 hover:bg-brand-red/10"
+                            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-brand-black/35 px-3 py-2 text-sm font-semibold text-white transition hover:border-brand-red/60 hover:bg-brand-red/10"
                           >
                             <Icon icon="solar:pen-bold" width={18} />
                             Attribuer / Reaffecter
@@ -330,7 +331,7 @@ export default function AdminDevoirManager() {
           </section>
         </div>
 
-        <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <section className="dashboard-panel mt-6 p-4">
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-base font-semibold">Notifications / Rappels</h3>
             <div className="text-sm text-white/70">Dernieres notifications (mock)</div>
@@ -338,7 +339,7 @@ export default function AdminDevoirManager() {
 
           <div className="max-h-72 overflow-y-auto pr-1">
             {notifications.length === 0 ? (
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center text-sm text-white/70">
+              <div className="dashboard-subpanel p-5 text-center text-sm text-white/70">
                 Aucune notification pour le moment. Clique sur "Relancer avec rappels".
               </div>
             ) : null}
@@ -347,7 +348,7 @@ export default function AdminDevoirManager() {
               {notifications.slice(0, 10).map((notification) => (
                 <li
                   key={notification.id ?? notification.created_at}
-                  className="flex flex-col gap-1 rounded-xl border border-white/10 bg-black/20 p-3 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-1 rounded-xl border border-white/10 bg-brand-soft/72 p-3 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-white/90">{notification.content}</p>
