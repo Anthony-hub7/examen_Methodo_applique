@@ -1,126 +1,153 @@
-import { useEffect, useState } from "react"
+import { useId, useMemo, useState } from 'react'
 
-export default function Ghost() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 })
-  const [isOut, setIsOut] = useState(false)
+const SIZE_MAP = {
+  sm: 120,
+  md: 148,
+  lg: 176,
+}
 
-  useEffect(() => {
-    const move = (e) => setMouse({ x: e.clientX, y: e.clientY })
+const clamp = (value, min, max) => Math.max(min, Math.min(value, max))
 
-    const leave = () => setIsOut(true)
-    const enter = () => setIsOut(false)
+export default function Ghost({ size = 'md', className = '' }) {
+  const [look, setLook] = useState({ x: 0, y: 0, active: false })
+  const ghostId = useId()
 
-    window.addEventListener("mousemove", move)
-    window.addEventListener("mouseleave", leave)
-    window.addEventListener("mouseenter", enter)
+  const id = useMemo(() => ghostId.replace(/[^a-zA-Z0-9_-]/g, ''), [ghostId])
+  const auraGradientId = `ghost-aura-${id}`
+  const bodyGradientId = `ghost-body-${id}`
+  const eyeGlowId = `ghost-eye-glow-${id}`
 
-    return () => {
-      window.removeEventListener("mousemove", move)
-      window.removeEventListener("mouseleave", leave)
-      window.removeEventListener("mouseenter", enter)
-    }
-  }, [])
+  const dimension = typeof size === 'number' ? size : SIZE_MAP[size] ?? SIZE_MAP.md
+  const height = Math.round(dimension * 1.22)
 
-  const clamp = (value, min, max) => Math.max(min, Math.min(value, max))
+  const handleMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const relativeX = (event.clientX - rect.left) / rect.width
+    const relativeY = (event.clientY - rect.top) / rect.height
 
-  const eye = (strength = 18) => {
-    const dx = mouse.x - window.innerWidth / 2
-    const dy = mouse.y - window.innerHeight / 2
-
-    const max = 7
-
-    let x = dx / strength
-    let y = dy / strength
-
-    x = Math.max(-max, Math.min(max, x))
-    y = Math.max(-max, Math.min(max, y))
-
-    return { x, y }
+    setLook({
+      x: clamp((relativeX - 0.5) * 2, -1, 1),
+      y: clamp((relativeY - 0.5) * 2, -1, 1),
+      active: true,
+    })
   }
 
-  const m = eye()
-
-  // 👉 AJOUT : léger mouvement des yeux noirs
-  const eyeOffset = {
-    x: m.x * 0.1,
-    y: m.y * 0.1,
+  const resetLook = () => {
+    setLook({ x: 0, y: 0, active: false })
   }
+
+  const pupilX = clamp(look.x * 4.5, -4.5, 4.5)
+  const pupilY = clamp(look.y * 4.5, -4.5, 4.5)
+  const mouthPath = look.active ? 'M78 123 Q100 133 122 123' : 'M81 123 Q100 115 119 123'
 
   return (
-    <>
+    <div
+      className={className}
+      style={{ width: `${dimension}px`, height: `${height}px` }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setLook((current) => ({ ...current, active: true }))}
+      onMouseLeave={resetLook}
+      aria-hidden="true"
+    >
       <style>{`
-        @keyframes floatGhost {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-25px); }
-          100% { transform: translateY(0px); }
+        @keyframes ghostMascotFloat {
+          0%, 100% { transform: translateY(0px) rotate(-1.2deg); }
+          50% { transform: translateY(-8px) rotate(1.2deg); }
+        }
+
+        @keyframes ghostMascotAura {
+          0%, 100% { opacity: 0.34; transform: scale(1); }
+          50% { opacity: 0.62; transform: scale(1.06); }
         }
       `}</style>
 
-      <div style={styles.wrapper}>
-        <div style={styles.float}>
-          <svg width="120" height="150" viewBox="0 0 120 150">
+      <svg
+        viewBox="0 0 200 220"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          overflow: 'visible',
+        }}
+      >
+        <defs>
+          <radialGradient id={auraGradientId} cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stopColor="rgba(223, 37, 49, 0.46)" />
+            <stop offset="65%" stopColor="rgba(223, 37, 49, 0.2)" />
+            <stop offset="100%" stopColor="rgba(223, 37, 49, 0)" />
+          </radialGradient>
 
-            {/* BODY */}
-            <path
-              d="
-                M60 20
-                C35 20, 20 40, 20 65
-                C20 95, 35 110, 35 125
-                C35 135, 25 135, 25 145
-                L40 135
-                L50 145
-                L60 135
-                L70 145
-                L80 135
-                L95 145
-                C95 135, 85 135, 85 125
-                C85 110, 100 95, 100 65
-                C100 40, 85 20, 60 20
-                Z
-              "
-              fill="#ffffff46"
-              style={{
-                filter: "drop-shadow(0px 10px 15px rgba(0,0,0,0.2))"
-              }}
-            />
+          <linearGradient id={bodyGradientId} x1="50%" y1="8%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#fff9f9" />
+            <stop offset="68%" stopColor="#f5eded" />
+            <stop offset="100%" stopColor="#e8dddd" />
+          </linearGradient>
 
-            {/* Eyes (maintenant ils bougent aussi) */}
-            <circle cx={45 + eyeOffset.x} cy={60 + eyeOffset.y} r="8" fill="black" />
-            <circle cx={75 + eyeOffset.x} cy={60 + eyeOffset.y} r="8" fill="black" />
+          <filter id={eyeGlowId}>
+            <feGaussianBlur stdDeviation="1.2" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
 
-            {/* Pupils */}
-            <circle cx={45 + m.x * 0.3} cy={60 + m.y * 0.3} r="3" fill="white" />
-            <circle cx={75 + m.x * 0.3} cy={60 + m.y * 0.3} r="3" fill="white" />
+        <g style={{ animation: 'ghostMascotAura 3.2s ease-in-out infinite', transformOrigin: '100px 110px' }}>
+          <ellipse cx="100" cy="112" rx="86" ry="78" fill={`url(#${auraGradientId})`} />
+        </g>
 
-            {/* MOUTH */}
-            {!isOut ? (
-              <circle cx="60" cy="90" r="4" fill="black" />
-            ) : (
-              <path
-                d="M52 92 Q60 100 68 92"
-                stroke="black"
-                strokeWidth="3"
-                fill="none"
-                strokeLinecap="round"
-              />
-            )}
+        <g style={{ animation: 'ghostMascotFloat 4s ease-in-out infinite', transformOrigin: '100px 112px' }}>
+          <path
+            d="
+              M100 22
+              C60 22, 36 53, 36 93
+              C36 126, 42 147, 42 169
+              C42 182, 34 191, 34 202
+              C44 198, 52 186, 62 202
+              C71 186, 80 189, 88 202
+              C95 188, 105 188, 112 202
+              C120 189, 129 186, 138 202
+              C148 186, 156 198, 166 202
+              C166 191, 158 182, 158 169
+              C158 147, 164 126, 164 93
+              C164 53, 140 22, 100 22
+              Z
+            "
+            fill={`url(#${bodyGradientId})`}
+            stroke="rgba(255, 235, 235, 0.75)"
+            strokeWidth="1.8"
+          />
 
-          </svg>
-        </div>
-      </div>
-    </>
+          <path
+            d="
+              M100 34
+              C72 34, 54 58, 54 89
+              C54 99, 56 108, 58 114
+              C70 90, 87 75, 100 75
+              C113 75, 130 90, 142 114
+              C144 108, 146 99, 146 89
+              C146 58, 128 34, 100 34
+              Z
+            "
+            fill="rgba(255, 255, 255, 0.45)"
+          />
+
+          <ellipse cx="74" cy="98" rx="13" ry="16" fill="#0a0a0a" />
+          <ellipse cx="126" cy="98" rx="13" ry="16" fill="#0a0a0a" />
+
+          <circle cx={74 + pupilX} cy={98 + pupilY} r="5.1" fill="#df2531" filter={`url(#${eyeGlowId})`} />
+          <circle cx={126 + pupilX} cy={98 + pupilY} r="5.1" fill="#df2531" filter={`url(#${eyeGlowId})`} />
+
+          <circle cx={76 + pupilX} cy={96 + pupilY} r="1.9" fill="rgba(255, 255, 255, 0.95)" />
+          <circle cx={128 + pupilX} cy={96 + pupilY} r="1.9" fill="rgba(255, 255, 255, 0.95)" />
+
+          <path d={mouthPath} stroke="#1a1a1a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+
+          <ellipse cx="60" cy="118" rx="7.5" ry="4.5" fill="rgba(223, 37, 49, 0.35)" />
+          <ellipse cx="140" cy="118" rx="7.5" ry="4.5" fill="rgba(223, 37, 49, 0.35)" />
+        </g>
+      </svg>
+    </div>
   )
-}
-
-const styles = {
-  wrapper: {
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  float: {
-    animation: "floatGhost 3s ease-in-out infinite",
-  },
 }

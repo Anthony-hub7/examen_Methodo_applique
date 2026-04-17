@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import Ghost from '../ui/Ghost'
 
 export default function SignupForm() {
   const navigate = useNavigate()
@@ -63,8 +64,9 @@ export default function SignupForm() {
           onSubmit={handleSubmit}
           className="w-full space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6"
         >
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-3">
             <img src="/Logo.png" alt="StudySquad logo" className="h-14 w-auto" />
+            <Ghost size="md" className="drop-shadow-[0_0_30px_rgba(223,37,49,0.25)]" />
             <h1 className="text-2xl font-bold">Inscription</h1>
           </div>
 
