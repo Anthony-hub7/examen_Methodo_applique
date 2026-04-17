@@ -22,6 +22,7 @@ function buildNavLinks(userRole) {
 
 export default function DashboardLayout({ userName, roleLabel, userRole, onLogout, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const navLinks = buildNavLinks(userRole)
 
   return (
@@ -41,7 +42,12 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
       <div className="relative z-10 flex min-h-screen flex-col md:flex-row">
         {/* Sidebar desktop */}
         <div className="hidden md:block">
-          <DashboardSidebar roleLabel={roleLabel} navLinks={navLinks} />
+          <DashboardSidebar
+            roleLabel={roleLabel}
+            navLinks={navLinks}
+            collapsed={sidebarCollapsed}
+            onToggleCollapse={() => setSidebarCollapsed((value) => !value)}
+          />
         </div>
 
         {/* Mobile overlay */}
@@ -62,7 +68,11 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
                 transition={{ duration: 0.2 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <DashboardSidebar roleLabel={roleLabel} navLinks={navLinks} onNavigate={() => setSidebarOpen(false)} />
+                <DashboardSidebar
+                  roleLabel={roleLabel}
+                  navLinks={navLinks}
+                  onNavigate={() => setSidebarOpen(false)}
+                />
               </motion.div>
             </motion.div>
           ) : null}
