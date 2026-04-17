@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { playSong } from '@/services/soundManager'
 
 export default function SignupForm() {
   const navigate = useNavigate()
@@ -126,13 +127,14 @@ export default function SignupForm() {
             type="submit"
             disabled={loading}
             className="w-full rounded-lg bg-brand-red px-4 py-2 font-semibold disabled:opacity-60"
+            onClick={playSong}
           >
             {loading ? 'Creation...' : 'Creer un compte'}
           </button>
 
           <p className="text-sm text-white/80">
             Deja un compte ?{' '}
-            <Link className="text-brand-red underline" to="/login">
+            <Link className="text-brand-red underline" to="/login" onClick={playSong}>
               Se connecter
             </Link>
           </p>

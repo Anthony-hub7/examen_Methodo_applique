@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { useAuth } from '../../hooks/useAuth'
 import { usePosts } from '../../hooks/usePosts'
+import { playSong } from '@/services/soundManager'
 
 const TYPE_META = {
   help_devoir: {
@@ -81,6 +82,7 @@ export default function PostFeedItem({ post }) {
   }, [post.comments])
 
   const handleToggleLike = () => {
+    playSong()
     if (!userId) return
     setLikeAnimating(true)
     setTimeout(() => setLikeAnimating(false), 600)
@@ -154,7 +156,11 @@ export default function PostFeedItem({ post }) {
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() => setPostActive(post.id, !(post.isActive !== false))}
+                onClick={() =>   {
+                  playSong()
+                  setPostActive(post.id, !(post.isActive !== false))
+                }
+                }
                 className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/60 transition hover:text-white"
                 title={post.isActive === false ? 'Activer' : 'Désactiver'}
               >

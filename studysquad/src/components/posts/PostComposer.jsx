@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { useAuth } from '../../hooks/useAuth'
 import { usePosts } from '../../hooks/usePosts'
 import dataAdmin from '../../services/dataAdmin.json'
+import { playSong } from '@/services/soundManager'
 
 const TYPE_OPTIONS = [
   { value: 'help_devoir', label: 'Aide devoir', icon: 'solar:book-bold', color: 'text-violet-400' },
@@ -108,7 +109,10 @@ export default function PostComposer({ onCreated }) {
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => setType(opt.value)}
+                onClick={() => {
+                  playSong()
+                  setType(opt.value)
+                }}
                 className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${type === opt.value
                     ? 'border-brand-red/60 bg-brand-red/15 text-white'
                     : 'border-white/10 bg-white/5 text-white/60 hover:border-white/20 hover:text-white/80'

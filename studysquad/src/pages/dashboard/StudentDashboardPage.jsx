@@ -2,12 +2,14 @@ import { useNavigate } from 'react-router-dom'
 import ClientDash from '../../components/dashboard/ClientDash'
 import { useAuth } from '../../hooks/useAuth'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { playBye } from '@/services/soundManager'
 
 export default function StudentDashboardPage() {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
 
   const handleLogout = () => {
+    playBye()
     logout()
     navigate('/')
   }

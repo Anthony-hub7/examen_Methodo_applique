@@ -1,3 +1,4 @@
+import { playSong } from '@/services/soundManager'
 import { Link, useLocation } from 'react-router-dom'
 
 export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
@@ -10,7 +11,10 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
   const normalizePath = (p) => String(p).split('#')[0]
   const isActive = (path) => location.pathname === normalizePath(path)
 
-  const handleNavigate = () => onNavigate?.()
+  const handleNavigate = () => {
+    playSong()
+    onNavigate?.()
+  }
 
   return (
     <aside className="h-full w-full max-w-xs overflow-y-auto border-r border-white/10 bg-brand-dark/80 p-4 text-white backdrop-blur-md md:min-h-screen">

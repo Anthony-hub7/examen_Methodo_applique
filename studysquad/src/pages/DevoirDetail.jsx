@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useDevoirs } from '../hooks/useDevoirs'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
+import { playBye, playSongBG, playTyping } from '@/services/soundManager'
 
 const ANSWERS_STORAGE_KEY = 'studysquad_student_devoir_answers'
 const PDF_WORKER_URL = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
@@ -188,11 +189,38 @@ export default function DevoirDetail() {
     const uniqueById = new Map(rawUsers.map((member) => [String(member.id), member]))
     return Array.from(uniqueById.values())
   })()
+  
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+
+    playBye();
     logout()
     navigate('/')
+}
+
+useEffect(() => {
+  if (!editor) return
+
+  let last = 0
+
+  const handleUpdate = () => {
+    const now = Date.now()
+
+    // anti spam (évite son à chaque lettre trop violent)
+    if (now - last < 80) return
+    last = now
+    playSongBG()
+    playTyping()
   }
+
+  editor.on('update', handleUpdate)
+
+  return () => {
+    editor.off('update', handleUpdate)
+  }
+}, [editor])
+
+
 
   return (
     <DashboardLayout
@@ -344,7 +372,9 @@ export default function DevoirDetail() {
                     />
                   </div>
 
-                  <div className="max-h-[40vh] overflow-y-auto px-4 py-3">
+                  <div 
+                  id="editor-area"
+                  className="max-h-[40vh] overflow-y-auto px-4 py-3">
                     <EditorContent editor={editor} />
                   </div>
                 </div>

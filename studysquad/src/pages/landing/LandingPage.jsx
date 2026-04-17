@@ -10,6 +10,7 @@ import ambienceSound from '../../assets/audio/loop/idoberg-ambient-pads-loop-296
 import ideeImage from '../../assets/image/idee.jpg'
 import etudeImage from '../../assets/image/étude.jpg'
 import retrouverImage from '../../assets/image/retrouver.jpg'
+import { playClick, playSong } from '@/services/soundManager'
 
 const features = [
   {
@@ -172,6 +173,7 @@ export default function LandingPage() {
             <Link
               to="/login"
               className="rounded-full bg-brand-red px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90 sm:px-5 sm:text-sm"
+             onClick={playSong}
             >
               Explorer
             </Link>
@@ -299,12 +301,14 @@ export default function LandingPage() {
                 <Link
                   to="/signin"
                   className="rounded-full bg-brand-red px-5 py-3 text-sm font-semibold text-white shadow-glow sm:px-6 sm:text-base"
+                  onClick={playClick}
                 >
                   Commencer maintenant
                 </Link>
                 <Link
                   to="/login"
                   className="rounded-full border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 sm:px-6 sm:text-base"
+                  onClick={playSong}
                 >
                   Se connecter
                 </Link>

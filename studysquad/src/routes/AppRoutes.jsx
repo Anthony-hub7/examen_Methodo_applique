@@ -11,8 +11,97 @@ import StudentGroupsPage from '../pages/dashboard/StudentGroupsPage'
 import CommunityPage from '../pages/CommunityPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicOnlyRoute from './PublicOnlyRoute'
+// dans App.jsx ou layout
+import { useEffect } from 'react'
+import { playTyping, stopTyping, playSong } from '@/services/soundManager' 
 
 export default function AppRoutes() {
+//   useEffect(() => {
+//   let isFocused = false
+
+//   const handleFocus = (e) => {
+//     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+//       isFocused = true
+//     }
+//   }
+
+//   const handleBlur = () => {
+//     isFocused = false
+//     stopTyping()
+//   }
+
+//   const handleInput = () => {
+//     if (isFocused) {
+//       playTyping()
+//     }
+//   }
+
+//   document.addEventListener('focusin', handleFocus)
+//   document.addEventListener('focusout', handleBlur)
+//   document.addEventListener('input', handleInput)
+
+//   return () => {
+//     document.removeEventListener('focusin', handleFocus)
+//     document.removeEventListener('focusout', handleBlur)
+//     document.removeEventListener('input', handleInput)
+//   }
+// }, [])
+
+useEffect(() => {
+  let isFocused = false
+  let inEditor = false
+
+  const editorDiv = document.getElementById('editor-area')
+
+  const handleFocus = (e) => {
+    const tag = e.target.tagName
+
+    if (tag === 'INPUT' || tag === 'TEXTAREA') {
+      isFocused = true
+    }
+
+    if (editorDiv?.contains(e.target)) {
+      inEditor = true
+    }
+  }
+
+  const handleBlur = () => {
+    isFocused = false
+    inEditor = false
+    stopTyping()
+  }
+
+  const handleInput = () => {
+    if (isFocused || inEditor) {
+      playTyping()
+    }
+  }
+
+  document.addEventListener('focusin', handleFocus)
+  document.addEventListener('focusout', handleBlur)
+  document.addEventListener('input', handleInput)
+
+  return () => {
+    document.removeEventListener('focusin', handleFocus)
+    document.removeEventListener('focusout', handleBlur)
+    document.removeEventListener('input', handleInput)
+  }
+}, [])
+
+useEffect(() => {
+  const handler = (e) => {
+    const el = e.target
+
+    if (el.tagName === 'BUTTON') {
+      playSong()
+    }
+  }
+
+  document.addEventListener('click', handler)
+
+  return () => document.removeEventListener('click', handler)
+}, [])
+
   return (
     <BrowserRouter>
       <Routes>

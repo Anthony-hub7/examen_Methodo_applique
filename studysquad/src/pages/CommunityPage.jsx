@@ -8,6 +8,7 @@ import PostFeedItem from '../components/posts/PostFeedItem'
 import { useAuth } from '../hooks/useAuth'
 import { usePosts } from '../hooks/usePosts'
 import dataAdmin from '../services/dataAdmin.json'
+import { playBye } from '@/services/soundManager'
 
 const groups = dataAdmin?.adminDevoirs?.groups || []
 const devoirs = dataAdmin?.adminDevoirs?.devoirs || []
@@ -30,7 +31,7 @@ export default function CommunityPage() {
 
   const isAdmin = user?.role === 'admin'
 
-  const handleLogout = () => { logout(); navigate('/') }
+  const handleLogout = () => { playBye(),logout(); navigate('/') }
 
   useEffect(() => {
     refresh({ includeInactive: isAdmin ? showInactive : false })

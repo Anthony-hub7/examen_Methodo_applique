@@ -82,7 +82,8 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
             <span className="min-w-0 flex-1 truncate text-sm text-white/90">{userName}</span>
 
             <button
-              onClick={onLogout}
+              onClick={
+                onLogout}
               className="rounded-md bg-brand-red px-3 py-2 text-sm font-semibold text-white shadow-glow transition hover:opacity-90"
             >
               Se deconnecter

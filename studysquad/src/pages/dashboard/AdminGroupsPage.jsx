@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import AdminGroupManager from '../../components/groupes/AdminGroupManager'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useAuth } from '../../hooks/useAuth'
+import { playBye } from '@/services/soundManager'
 
 export default function AdminGroupsPage() {
   const navigate = useNavigate()
@@ -9,6 +10,7 @@ export default function AdminGroupsPage() {
   const roleLabel = user?.role === 'admin' ? 'Dashboard Admin' : 'Dashboard Etudiant'
 
   const handleLogout = () => {
+    playBye()
     logout()
     navigate('/')
   }
