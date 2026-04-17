@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
 import heroVideo from '../../assets/hero/vecteezy_red-energy-magic-digital-high-tech-waves-with-light-rays_40831776.mp4'
+import heroPlanetMars from '../../assets/hero/extraordinary-artistic-planet-mars-with-red-surface-transparent-high-resolution-free-png.webp'
+import heroPlanetGray from '../../assets/hero/images.png'
+import heroPlanetRed from '../../assets/hero/pngtree-red-planet-texture-png-image_13310445.png'
 import ambienceSound from '../../assets/audio/loop/idoberg-ambient-pads-loop-296968.mp3'
 import ideeImage from '../../assets/image/idee.jpg'
 import etudeImage from '../../assets/image/étude.jpg'
@@ -245,41 +248,27 @@ export default function LandingPage() {
 
           <motion.div
             aria-hidden="true"
-            className="absolute left-[6%] top-[16%] h-20 w-20 overflow-hidden rounded-full bg-[radial-gradient(circle_at_30%_28%,#ff9aa1_0%,#ff5d66_18%,#df2531_42%,#5d0a14_78%,#180203_100%)] shadow-glow sm:h-24 sm:w-24"
+            className="absolute left-[6%] top-[16%] h-20 w-20 sm:h-24 sm:w-24"
             animate={{ y: [0, -14, 0], x: [0, 6, 0], rotate: [0, 6, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <div className="absolute inset-[16%] rounded-full border border-white/10 opacity-30" />
-            <div className="absolute left-[12%] top-[18%] h-4 w-4 rounded-full bg-black/25 blur-[1px] sm:h-5 sm:w-5" />
-            <div className="absolute right-[18%] top-[32%] h-3 w-3 rounded-full bg-black/30 sm:h-4 sm:w-4" />
-            <div className="absolute bottom-[18%] left-[28%] h-5 w-5 rounded-full border border-[#2a0508] bg-[#7d111b]/70 sm:h-6 sm:w-6" />
-            <div className="absolute inset-y-[38%] left-[-8%] right-[-8%] rounded-full border-t border-white/10 border-b border-black/15 opacity-45" />
-            <div className="absolute left-[18%] top-[14%] h-8 w-4 rotate-[-20deg] rounded-full bg-white/20 blur-md" />
+            <img src={heroPlanetMars} alt="" className="h-full w-full object-contain drop-shadow-[0_0_20px_rgba(223,37,49,0.45)]" />
           </motion.div>
           <motion.div
             aria-hidden="true"
-            className="absolute right-[8%] top-[24%] h-16 w-16 overflow-hidden rounded-full border border-white/20 bg-[radial-gradient(circle_at_35%_35%,#fafafa_0%,#d9d9d9_18%,#9d9d9d_42%,#5d5d5d_72%,#252525_100%)] backdrop-blur-md sm:h-20 sm:w-20"
+            className="absolute right-[8%] top-[24%] h-16 w-16 sm:h-20 sm:w-20"
             animate={{ y: [0, 12, 0], x: [0, -8, 0], rotate: [0, -8, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <div className="absolute left-[18%] top-[22%] h-3 w-3 rounded-full border border-black/15 bg-black/20 sm:h-4 sm:w-4" />
-            <div className="absolute right-[20%] top-[45%] h-2.5 w-2.5 rounded-full bg-black/20 sm:h-3 sm:w-3" />
-            <div className="absolute bottom-[16%] left-[30%] h-4 w-4 rounded-full border border-black/10 bg-black/15 sm:h-5 sm:w-5" />
-            <div className="absolute inset-y-[40%] left-[8%] right-[8%] rounded-full border-t border-white/15 opacity-30" />
-            <div className="absolute left-[20%] top-[10%] h-6 w-3 rotate-[-18deg] rounded-full bg-white/35 blur-md" />
+            <img src={heroPlanetGray} alt="" className="h-full w-full object-contain drop-shadow-[0_0_18px_rgba(255,255,255,0.18)]" />
           </motion.div>
           <motion.div
             aria-hidden="true"
-            className="absolute bottom-[16%] right-[18%] hidden h-32 w-32 overflow-hidden rounded-full border border-[#df2531]/60 bg-[radial-gradient(circle_at_30%_30%,#ff5c75_0%,#a51523_24%,#34050b_58%,#050505_100%)] shadow-glow md:block"
+            className="absolute bottom-[16%] right-[18%] hidden h-32 w-32 md:block"
             animate={{ y: [0, -16, 0], x: [0, 10, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <div className="absolute inset-[8%] rounded-full border border-white/10 opacity-25" />
-            <div className="absolute inset-y-[48%] left-[-10%] right-[-10%] rotate-[-8deg] rounded-full border-t border-[#ff7a85]/50" />
-            <div className="absolute left-[18%] top-[18%] h-7 w-7 rounded-full border border-black/20 bg-black/25" />
-            <div className="absolute right-[22%] top-[28%] h-4 w-4 rounded-full bg-[#250307]/80" />
-            <div className="absolute bottom-[18%] left-[26%] h-9 w-9 rounded-full border border-[#210306] bg-[#6c0d18]/60" />
-            <div className="absolute left-[24%] top-[12%] h-10 w-5 rotate-[-22deg] rounded-full bg-white/15 blur-lg" />
+            <img src={heroPlanetRed} alt="" className="h-full w-full object-contain drop-shadow-[0_0_24px_rgba(223,37,49,0.4)]" />
           </motion.div>
           <motion.div
             aria-hidden="true"
