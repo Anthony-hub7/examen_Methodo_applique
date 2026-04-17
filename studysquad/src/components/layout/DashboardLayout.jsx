@@ -1,14 +1,54 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import DashboardSidebar from './DashboardSidebar'
 import Footer from './Footer'
 import { getDashboardLinks, normalizeRole } from '../../routes/paths'
+import { supabase } from '../../../src/services/supabaseClient'
+
 
 export default function DashboardLayout({ userName, roleLabel, userRole, onLogout, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const role = normalizeRole(userRole)
   const navLinks = getDashboardLinks(role)
+
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+
+    getUser()
+  }, [])
+
+  const [roles, setRole] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [loadingProfile, setLoadingProfile] = useState(true)
+    // alert(user);
+    useEffect(() => {
+  const fetchProfile = async () => {
+    if (!user?.id) return
+
+    setLoadingProfile(true)
+
+    const { data, error } = await supabase
+      .from('members')
+      .select('role, name')
+      .eq('id', user.id)
+      .single()
+
+    if (!error && data) {
+      setProfile(data.name)
+      setRole(data.role)
+      console.log(data);
+    }
+
+    setLoadingProfile(false)
+  }
+
+  fetchProfile()
+}, [user?.id])
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -53,7 +93,7 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
               <Icon icon="solar:hamburger-menu-bold" width={22} />
             </button>
 
-            <span className="min-w-0 flex-1 truncate text-sm text-white/90">{userName}</span>
+            <span className="min-w-0 flex-1 truncate text-sm text-white/90">{profile} {roles}</span>
 
             <button
               onClick={onLogout}

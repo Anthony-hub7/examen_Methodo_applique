@@ -11,6 +11,7 @@ export default function DashboardSidebar({ roleLabel, navLinks, onNavigate }) {
   const isActive = (path) => location.pathname === normalizePath(path)
 
   const handleNavigate = () => onNavigate?.()
+ const communityPath = `${basePath}/community`
 
   return (
     <aside className="h-full w-full max-w-xs overflow-y-auto border-r border-white/10 bg-[#121212] p-4 text-white md:min-h-screen">

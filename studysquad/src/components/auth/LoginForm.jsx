@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { supabase } from '../../../src/services/supabaseClient'
+
 
 export default function LoginForm() {
   const navigate = useNavigate()
@@ -10,19 +12,68 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault()
+  //   setError('')
+  //   setLoading(true)
+  //   try {
+  //     // const user = await login({ email, password })
+  //     // navigate(user.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
+  //     async function login({ email, password }) {
+  //       const { data, error } = await supabase.auth.signInWithPassword({
+  //         email,
+  //         password,
+  //       })
+
+  //       if (error) throw error
+
+  //       return data.user
+  //     }
+  //   } catch (currentError) {
+  //     setError(currentError.message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
     setLoading(true)
+
     try {
-      const user = await login({ email, password })
-      navigate(user.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) throw error
+      const user = data.user
+      
+      alert("connecter huhu");
+      // console.log("data user", user);
+      // navigate(user.role === 'student' ? '/dashboard/student' : '/dashboard/admin')
+      //  récupérer le profil dans ta table
+      const { data: member, error: memberError } = await supabase
+        .from('members')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (memberError) throw memberError
+  
+      //  redirection selon TON rôle
+      navigate(
+        member.role === 'admin'
+          ? '/dashboard/admin'
+          : '/dashboard/student'
+      )
+
     } catch (currentError) {
       setError(currentError.message)
     } finally {
       setLoading(false)
     }
-  }
+}
 
   return (
     <div className="relative min-h-screen bg-black text-white">

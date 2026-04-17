@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 )
 
-export default function Dashboard() {
+export default function StatsCard() {
 
   const [view, setView] = useState("semaine")
 

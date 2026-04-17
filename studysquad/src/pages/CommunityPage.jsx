@@ -11,8 +11,38 @@ export default function CommunityPage() {
   const { user, logout } = useAuth()
   const { posts, loading, error, includeInactive, refresh } = usePosts()
   const [showInactive, setShowInactive] = useState(false)
+  const [role, setRole] = useState(null)
+  const [profile, setProfile] = useState(null)
+const [loadingProfile, setLoadingProfile] = useState(true)
+  alert(user);
+  useEffect(() => {
+  const fetchProfile = async () => {
+    if (!user?.id) return
 
-  const isAdmin = user?.role === 'admin'
+    setLoadingProfile(true)
+
+    const { data, error } = await supabase
+      .from('members')
+      .select('role, name')
+      .eq('id', user.id)
+      .single()
+
+    if (!error && data) {
+      setProfile(data)
+      setRole(data.role)
+      console.log("profil,", data);
+      console.log("role,", data.role);
+
+    }
+
+    setLoadingProfile(false)
+  }
+
+  fetchProfile()
+}, [user?.id])
+
+  // const isAdmin = user?.role === 'admin'
+  const isAdmin = role === 'admin'
 
   const handleLogout = () => {
     logout()
@@ -29,11 +59,23 @@ export default function CommunityPage() {
   }, [isAdmin, posts, showInactive])
 
   return (
+    // <DashboardLayout
+    //   userName={`${user?.name} (${user?.role || 'user'})`}
+    //   roleLabel={isAdmin ? 'Dashboard Admin' : 'Dashboard Etudiant'}
+    //   userRole={user?.role}
+    //   onLogout={handleLogout}
+    // >
     <DashboardLayout
-      userName={`${user?.name} (${user?.role || 'user'})`}
-      roleLabel={isAdmin ? 'Dashboard Admin' : 'Dashboard Etudiant'}
-      userRole={user?.role}
-      onLogout={handleLogout}
+        // userName={`${user?.email} (${role || 'user'})`}
+        // userName={`${profile?.name || user?.email} (${role || 'user'})`}
+        userName={
+  loadingProfile
+    ? 'Loading...'
+    : `${profile?.name || user?.email || 'User'} (${role || 'user'})`
+}
+        roleLabel={isAdmin ? 'Dashboard Admin' : 'Dashboard Etudiant'}
+        userRole={role}
+        onLogout={handleLogout}
     >
       <div className="mx-auto w-full max-w-4xl p-5">
         <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
