@@ -150,6 +150,29 @@
         "created_at": "2026-03-17T12:00:00.000Z"
       }
     ],
+    "chat": [
+      {
+        "id": "chat-001",
+        "message": "Je prends les exercices 1 et 2. Quelqu'un peut verifier ma resolution apres ?",
+        "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
+        "member_id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "created_at": "2026-04-16T18:05:00.000Z"
+      },
+      {
+        "id": "chat-002",
+        "message": "Oui, je relis ca. Je peux aussi m'occuper de la mise en forme finale du PDF.",
+        "group_id": "4f0b8a9c-1e7a-4a0d-b3f2-91aa7b0f3c22",
+        "member_id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
+        "created_at": "2026-04-16T18:11:00.000Z"
+      },
+      {
+        "id": "chat-003",
+        "message": "Pour les derivees, on se partage definitions et exemples ?",
+        "group_id": "12a6c8f2-0b1a-4c2d-bf88-3a10d9c1b2aa",
+        "member_id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
+        "created_at": "2026-04-16T19:20:00.000Z"
+      }
+    ],
     "notifications": [],
     "remindersSent": 0
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
@@ -8,6 +8,7 @@ import StarterKit from '@tiptap/starter-kit'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import { useAuth } from '../hooks/useAuth'
 import { useDevoirs } from '../hooks/useDevoirs'
+import { useGroupChat } from '../hooks/useGroupChat'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 
@@ -66,6 +67,17 @@ function firstLetterAvatar(name) {
   return String(name || '?').trim().charAt(0).toUpperCase() || '?'
 }
 
+function formatDateTimeFR(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  return date.toLocaleString('fr-FR', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
 function RichToolbarButton({ active, icon, label, onClick }) {
   return (
     <button
@@ -93,6 +105,8 @@ export default function DevoirDetail() {
   const [selectedDevoirId, setSelectedDevoirId] = useState('')
   const [activeQuestionId, setActiveQuestionId] = useState('q1')
   const [answerStore, setAnswerStore] = useState(() => readAnswersStorage())
+  const [chatDraft, setChatDraft] = useState('')
+  const chatListRef = useRef(null)
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
 
@@ -177,17 +191,43 @@ export default function DevoirDetail() {
 
   const selectedGroup = selectedDevoir?.group_id ? groupById.get(selectedDevoir.group_id) : null
   const selectedMember = selectedDevoir?.member_id ? memberById.get(selectedDevoir.member_id) : null
+  const currentMember =
+    members.find(
+      (member) =>
+        String(member.email || '').toLowerCase() === String(user?.email || '').toLowerCase() ||
+        String(member.name || '').toLowerCase() === String(user?.name || '').toLowerCase(),
+    ) || selectedMember || null
+
+  const { messages: groupMessages, loading: chatLoading, sending: chatSending, error: chatError, sendMessage } = useGroupChat({
+    groupId: selectedGroup?.id || '',
+    memberId: currentMember?.id || '',
+  })
 
   const connectedUsers = (() => {
     if (!selectedDevoir?.group_id || !selectedGroup) return []
 
-    const rawUsers = [selectedMember, members.find((member) => String(member.id) === String(selectedGroup.created_by))].filter(
-      Boolean,
-    )
+    const rawUsers = members.filter((member) => {
+      const participatesInDevoirGroup = String(selectedDevoir.group_id) === String(selectedGroup.id)
+      const ownsSelectedDevoir = String(member.id) === String(selectedDevoir.member_id)
+      const createdGroup = String(member.id) === String(selectedGroup.created_by)
+      const wroteInChat = groupMessages.some((message) => String(message.member_id) === String(member.id))
+      return participatesInDevoirGroup && (ownsSelectedDevoir || createdGroup || wroteInChat)
+    })
 
     const uniqueById = new Map(rawUsers.map((member) => [String(member.id), member]))
     return Array.from(uniqueById.values())
   })()
+
+  useEffect(() => {
+    if (!chatListRef.current) return
+    chatListRef.current.scrollTop = chatListRef.current.scrollHeight
+  }, [groupMessages, selectedGroup?.id])
+
+  const handleSendChatMessage = async (event) => {
+    event.preventDefault()
+    const didSend = await sendMessage(chatDraft)
+    if (didSend) setChatDraft('')
+  }
 
   const handleLogout = () => {
     logout()
@@ -245,8 +285,8 @@ export default function DevoirDetail() {
           ) : null}
 
           {!loading && selectedDevoir ? (
-            <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <article className="rounded-2xl border border-white/10 bg-[#0f0f12] p-3">
+            <section className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+              <article className="flex min-h-0 flex-col gap-3 rounded-2xl border border-white/10 bg-[#0f0f12] p-3">
                 <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
                   <div className="min-w-0">
                     <h2 className="truncate text-sm font-semibold uppercase tracking-wide text-white/75">Sujet PDF</h2>
@@ -262,9 +302,113 @@ export default function DevoirDetail() {
                     <Viewer fileUrl={pdfFileUrl} plugins={[defaultLayoutPluginInstance]} />
                   </Worker>
                 </div>
+
+                <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-white/10 bg-black/30 p-3">
+                  <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-white/90">Chat du devoir en groupe</h3>
+                      <p className="mt-1 text-xs text-white/65">
+                        {selectedGroup
+                          ? `Discussion du groupe ${selectedGroup.name} autour du devoir actif.`
+                          : 'Le chat est reserve aux devoirs rattaches a un groupe.'}
+                      </p>
+                    </div>
+                    {selectedGroup ? (
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70">
+                        {groupMessages.length} message{groupMessages.length > 1 ? 's' : ''}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  {!selectedGroup ? (
+                    <div className="mt-3 rounded-xl border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-sm text-white/60">
+                      Ce devoir est en mode solo. Pour activer le chat et la collaboration, associez ce devoir à un groupe.
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        ref={chatListRef}
+                        className="mt-3 flex max-h-[32vh] min-h-[260px] flex-1 flex-col gap-3 overflow-y-auto pr-1"
+                      >
+                        {chatLoading ? (
+                          <p className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-4 text-sm text-white/60">
+                            Chargement des messages...
+                          </p>
+                        ) : null}
+
+                        {!chatLoading && groupMessages.length === 0 ? (
+                          <p className="rounded-xl border border-dashed border-white/10 bg-white/[0.03] px-3 py-4 text-sm text-white/60">
+                            Aucun message pour le moment. Lancez la discussion pour coordonner le travail du groupe.
+                          </p>
+                        ) : null}
+
+                        {!chatLoading
+                          ? groupMessages.map((message) => {
+                              const author = memberById.get(message.member_id)
+                              const isCurrentUser = String(message.member_id) === String(currentMember?.id)
+
+                              return (
+                                <div
+                                  key={message.id}
+                                  className={`max-w-[88%] rounded-2xl border px-3 py-2 ${
+                                    isCurrentUser
+                                      ? 'ml-auto border-brand-red/30 bg-brand-red/15'
+                                      : 'border-white/10 bg-white/[0.04]'
+                                  }`}
+                                >
+                                  <div className="mb-1 flex items-center gap-2">
+                                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[11px] font-bold text-white">
+                                      {firstLetterAvatar(author?.name)}
+                                    </span>
+                                    <span className="text-xs font-semibold text-white/90">
+                                      {author?.name || 'Membre inconnu'}
+                                    </span>
+                                    <span className="text-[11px] text-white/45">{formatDateTimeFR(message.created_at)}</span>
+                                  </div>
+                                  <p className="whitespace-pre-wrap text-sm leading-6 text-white/85">{message.message}</p>
+                                </div>
+                              )
+                            })
+                          : null}
+                      </div>
+
+                      <form onSubmit={handleSendChatMessage} className="mt-3 border-t border-white/10 pt-3">
+                        <label htmlFor="group-chat-message" className="sr-only">
+                          Message du groupe
+                        </label>
+                        <textarea
+                          id="group-chat-message"
+                          value={chatDraft}
+                          onChange={(event) => setChatDraft(event.target.value)}
+                          placeholder="Ecrivez un message pour repartir les taches, poser une question ou partager un avancement..."
+                          rows={3}
+                          disabled={chatSending || !currentMember}
+                          className="w-full resize-none rounded-xl border border-white/10 bg-[#111217] px-3 py-3 text-sm text-white outline-none transition focus:border-brand-red/50 disabled:cursor-not-allowed disabled:opacity-60"
+                        />
+
+                        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="text-xs text-white/55">
+                            {currentMember
+                              ? `Envoi en tant que ${currentMember.name}`
+                              : "Aucun membre du groupe n'est associe a la session actuelle."}
+                          </div>
+                          <button
+                            type="submit"
+                            disabled={chatSending || !chatDraft.trim() || !currentMember}
+                            className="inline-flex items-center justify-center rounded-xl bg-brand-red px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {chatSending ? 'Envoi...' : 'Envoyer'}
+                          </button>
+                        </div>
+
+                        {chatError ? <p className="mt-2 text-sm text-red-300">{chatError}</p> : null}
+                      </form>
+                    </>
+                  )}
+                </div>
               </article>
 
-              <article className="rounded-2xl border border-white/10 bg-[#0f0f12] p-3">
+              <article className="flex min-h-0 flex-col gap-3 rounded-2xl border border-white/10 bg-[#0f0f12] p-3">
                 <div className="mb-3 rounded-xl border border-white/10 bg-white/5 p-3">
                   <h2 className="text-sm font-semibold uppercase tracking-wide text-white/75">Réponses collaboratives</h2>
                   <p className="mt-1 text-sm text-white/65">
@@ -349,14 +493,14 @@ export default function DevoirDetail() {
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/65">
+                <div className="rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/65">
                   <p>
                     Collaboration temps réel (Yjs): non activée pour l&apos;instant. La structure est prête pour brancher un provider
                     ensuite.
                   </p>
                 </div>
 
-                <div className="mt-3 rounded-xl border border-white/10 bg-black/30 p-3">
+                <div className="rounded-xl border border-white/10 bg-black/30 p-3">
                   <h3 className="text-sm font-semibold text-white/90">Utilisateurs connectés</h3>
                   {selectedGroup ? (
                     <>
@@ -384,6 +528,7 @@ export default function DevoirDetail() {
                     <p className="mt-1 text-xs text-white/65">Mode solo: aucun utilisateur connecté à afficher.</p>
                   )}
                 </div>
+
               </article>
             </section>
           ) : null}
