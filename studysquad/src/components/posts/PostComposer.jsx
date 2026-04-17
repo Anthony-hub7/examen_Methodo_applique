@@ -108,7 +108,9 @@ export default function PostComposer({ onCreated }) {
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => setType(opt.value)}
+                onClick={() => {
+                  setType(opt.value)
+                }}
                 className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${type === opt.value
                     ? 'border-brand-red/60 bg-brand-red/15 text-white'
                     : 'border-white/10 bg-white/5 text-white/60 hover:border-white/20 hover:text-white/80'

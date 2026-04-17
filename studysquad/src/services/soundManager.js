@@ -2,8 +2,10 @@
 const audio = new Audio('/go.mp3')
 const clicker = new Audio('/click.mp3')
 const bye = new Audio('/bye.mp3')
+const TYPING_VOLUME = 1 / 6
 let typing = new Audio('/keyboard.mp3')
 let lastPlay = 0
+typing.volume = TYPING_VOLUME
 
 
 export const playClick = () => {
@@ -23,6 +25,7 @@ export const playBye = () => {
 
 export const playTyping = () => {
   const audio = new Audio('/keyboard.mp3')
+  audio.volume = TYPING_VOLUME
 
   audio.currentTime = 0
   audio.play().catch(() => {})

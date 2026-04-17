@@ -154,7 +154,10 @@ export default function PostFeedItem({ post }) {
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() => setPostActive(post.id, !(post.isActive !== false))}
+                onClick={() =>   {
+                  setPostActive(post.id, !(post.isActive !== false))
+                }
+                }
                 className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/60 transition hover:text-white"
                 title={post.isActive === false ? 'Activer' : 'Désactiver'}
               >
