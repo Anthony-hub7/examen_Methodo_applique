@@ -33,7 +33,7 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
         loop
         playsInline
       >
-        <source src="/background1.mp4" type="video/mp4" />
+        <source src="/background2.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4),rgba(10,10,10,0.82))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(223,37,49,0.2),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(223,37,49,0.12),transparent_24%)]" />
