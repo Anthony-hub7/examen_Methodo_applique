@@ -8,8 +8,8 @@ export default function AdminGroupsPage() {
   const { user, logout } = useAuth()
   const roleLabel = user?.role === 'admin' ? 'Dashboard Admin' : 'Dashboard Etudiant'
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async() => {
+    await logout()
     navigate('/')
   }
 

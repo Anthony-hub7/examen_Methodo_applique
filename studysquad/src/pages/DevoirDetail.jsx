@@ -229,8 +229,8 @@ export default function DevoirDetail() {
     if (didSend) setChatDraft('')
   }
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async() => {
+    await logout()
     navigate('/')
   }
 

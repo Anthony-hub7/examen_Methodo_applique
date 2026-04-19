@@ -30,7 +30,7 @@ export default function CommunityPage() {
 
   const isAdmin = user?.role === 'admin'
 
-  const handleLogout = () => { logout(); navigate('/') }
+  const handleLogout = async() => { await logout(); navigate('/') }
 
   useEffect(() => {
     refresh({ includeInactive: isAdmin ? showInactive : false })
