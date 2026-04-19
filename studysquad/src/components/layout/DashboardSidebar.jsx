@@ -1,3 +1,4 @@
+import { playSong } from '@/services/soundManager'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
@@ -137,7 +138,10 @@ export default function DashboardSidebar({
 
   const normalizePath = (path) => String(path).split('#')[0]
   const isActive = (path) => location.pathname === normalizePath(path)
-  const handleNavigate = () => onNavigate?.()
+  const handleNavigate = () => {
+    playSong()
+    onNavigate?.()
+  }
   const canCollapse = typeof onToggleCollapse === 'function'
   const state = collapsed ? 'collapsed' : 'expanded'
 

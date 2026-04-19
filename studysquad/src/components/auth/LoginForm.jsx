@@ -17,6 +17,9 @@ export default function LoginForm() {
     setLoading(true)
     try {
       const user = await login({ email, password })
+      if (!user) {
+        throw new Error("Utilisateur non trouvé")
+      }
       navigate(user.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
     } catch (currentError) {
       setError(currentError.message)

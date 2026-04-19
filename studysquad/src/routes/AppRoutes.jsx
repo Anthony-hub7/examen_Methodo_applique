@@ -79,6 +79,20 @@ export default function AppRoutes() {
     }
   }, [])
 
+  useEffect(() => {
+  const handler = (e) => {
+    const el = e.target
+
+    if (el.tagName === 'BUTTON') {
+      playSong()
+    }
+  }
+
+  document.addEventListener('click', handler)
+
+  return () => document.removeEventListener('click', handler)
+}, [])
+
   return (
     <BrowserRouter>
       <LofiMiniPlayer />
