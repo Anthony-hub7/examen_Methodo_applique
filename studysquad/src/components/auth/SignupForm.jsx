@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { supabase } from '../../../src/services/supabaseClient'
 import Ghost from '../ui/Ghost'
 
 export default function SignupForm() {
@@ -31,7 +32,9 @@ export default function SignupForm() {
     }
 
     setLoading(true)
-    try {
+
+    //version localStorage
+   /* try {
       await signup({
         name: form.name,
         email: form.email,
@@ -41,6 +44,35 @@ export default function SignupForm() {
       navigate('/dashboard/student')
     } catch (currentError) {
       setError(currentError.message)
+    } finally {
+      setLoading(false)
+    }*/
+
+    //version supabase
+    try {
+      // creation de auth user dab
+      const { data, error: authError } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+      })
+      if (authError) throw authError
+      const user = data.user
+
+      // insert dzns members 
+      const { error: dbError } = await supabase.from('members').insert([
+        {
+          id: user.id,
+          name: form.name,
+          email: form.email,
+          niveau_etude: form.level,
+          role: 'student',
+        },
+      ])
+
+      if (dbError) throw dbError
+      navigate('/dashboard/student')
+    } catch (err) {
+      setError(err.message)
     } finally {
       setLoading(false)
     }

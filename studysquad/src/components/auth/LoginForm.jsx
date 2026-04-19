@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { supabase } from '../../../src/services/supabaseClient'
 import Ghost from '../ui/Ghost'
 
 export default function LoginForm() {
@@ -11,7 +12,8 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (event) => {
+  //version localStorage
+ /* const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
     setLoading(true)
@@ -21,6 +23,41 @@ export default function LoginForm() {
         throw new Error("Utilisateur non trouvé")
       }
       navigate(user.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
+    } catch (currentError) {
+      setError(currentError.message)
+    } finally {
+      setLoading(false)
+    }
+  }*/
+
+    //version supabase
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) throw error
+      const user = data.user
+      
+      alert("connecter huhu");
+      // console.log("datauser", user);
+      // navigate(user.role === 'student' ? '/dashboard/student' : '/dashboard/admin')
+      // récupérer le profil dans ta table
+      const { data: member, error: memberError } = await supabase
+        .from('members')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (memberError) throw memberError
+      navigate( member.role === 'admin'? '/dashboard/admin' : '/dashboard/student')
+      
     } catch (currentError) {
       setError(currentError.message)
     } finally {
