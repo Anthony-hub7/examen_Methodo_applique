@@ -7,8 +7,8 @@ import Ghost from '../ui/Ghost'
 export default function LoginForm() {
   const navigate = useNavigate()
   const { login } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('juliana.rasoamalalala@gmail.com')
+  const [password, setPassword] = useState('jujutsu')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -53,9 +53,11 @@ export default function LoginForm() {
         .from('members')
         .select('role')
         .eq('id', user.id)
-        .single()
+        .maybeSingle()
 
       if (memberError) throw memberError
+      console.log("member:", member)
+      console.log("memberError:", memberError)
       navigate( member.role === 'admin'? '/dashboard/admin' : '/dashboard/student')
       
     } catch (currentError) {

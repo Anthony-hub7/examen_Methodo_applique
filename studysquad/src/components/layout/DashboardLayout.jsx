@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import DashboardSidebar from './DashboardSidebar'
 import Footer from './Footer'
+import { supabase } from '../../../src/services/supabaseClient'
+
 
 function normalizeRole(role) {
   return role === 'admin' ? 'admin' : 'student'
@@ -24,6 +26,44 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const navLinks = buildNavLinks(userRole)
+
+  const [user, setUser] = useState(null)
+  const [roles, setRole] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [loadingProfile, setLoadingProfile] = useState(true)
+
+  useEffect(() => {
+      const getUser = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+      }
+
+      getUser()
+  }, [])
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user?.id) return
+
+      setLoadingProfile(true)
+
+      const { data, error } = await supabase
+        .from('members')
+        .select('role, name')
+        .eq('id', user.id)
+        .single()
+
+      if (!error && data) {
+        setProfile(data.name)
+        setRole(data.role)
+        console.log(data);
+      }
+
+      setLoadingProfile(false)
+    }
+
+    fetchProfile()
+  }, [user?.id])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-brand-black text-white">
@@ -89,7 +129,8 @@ export default function DashboardLayout({ userName, roleLabel, userRole, onLogou
               <Icon icon="solar:hamburger-menu-bold" width={22} />
             </button>
 
-            <span className="min-w-0 flex-1 truncate text-sm text-white/90">{userName}</span>
+            {/* <span className="min-w-0 flex-1 truncate text-sm text-white/90">{userName}</span> */}
+            <span className="min-w-0 flex-1 truncate text-sm text-white/90">{profile} ({roles})</span>
 
             <button
               onClick={onLogout}

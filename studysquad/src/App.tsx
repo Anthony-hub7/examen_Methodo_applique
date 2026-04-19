@@ -49,7 +49,7 @@ import { PostsProvider } from './context/PostsContext'
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      {/* <AppRoutes /> */}
       <PostsProvider>
         <AppRoutes />
       </PostsProvider>
