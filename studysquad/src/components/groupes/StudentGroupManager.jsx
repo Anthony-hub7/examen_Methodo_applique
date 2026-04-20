@@ -205,8 +205,8 @@ export default function StudentGroupManager() {
   }
 
   return (
-    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="dashboard-page-shell">
+      <div className="dashboard-page-content">
         <AnimatePresence>
           {notifications.slice(0, 3).map((notif) => (
             <motion.div
@@ -239,7 +239,7 @@ export default function StudentGroupManager() {
             <button
               type="button"
               onClick={openCreate}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-red/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-red/30"
+            className="inline-flex items-center gap-2 rounded-xl border border-brand-red/40 bg-brand-red/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-red/25"
             >
               <Icon icon="solar:add-circle-bold" width={18} />
               Créer un groupe
@@ -256,7 +256,7 @@ export default function StudentGroupManager() {
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 md:grid-cols-3">
+        <div className="dashboard-panel mb-4 grid grid-cols-1 gap-3 p-4 md:grid-cols-3">
           <label className="block md:col-span-2">
             <span className="mb-1 block text-sm text-white/75">Recherche</span>
             <input
@@ -264,7 +264,7 @@ export default function StudentGroupManager() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Nom du groupe ou description..."
-              className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+              className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
             />
           </label>
 
@@ -277,7 +277,7 @@ export default function StudentGroupManager() {
                 className={`rounded-xl border px-3 py-2 text-sm font-medium transition ${
                   viewMode === 'all'
                     ? 'border-brand-red/60 bg-brand-red/20 text-white'
-                    : 'border-white/10 bg-black/20 text-white/75 hover:bg-white/10'
+                    : 'border-white/10 bg-black/35 text-white/75 hover:bg-white/10'
                 }`}
               >
                 Tous
@@ -288,7 +288,7 @@ export default function StudentGroupManager() {
                 className={`rounded-xl border px-3 py-2 text-sm font-medium transition ${
                   viewMode === 'mine'
                     ? 'border-brand-red/60 bg-brand-red/20 text-white'
-                    : 'border-white/10 bg-black/20 text-white/75 hover:bg-white/10'
+                    : 'border-white/10 bg-black/35 text-white/75 hover:bg-white/10'
                 }`}
               >
                 Mes groupes
@@ -320,7 +320,7 @@ export default function StudentGroupManager() {
                     <button
                       type="button"
                       onClick={() => openMembers(group)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10"
+                      className="dashboard-button-ghost inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/80"
                     >
                       <Icon icon="solar:users-group-rounded-linear" width={14} />
                       Voir membres
@@ -336,7 +336,7 @@ export default function StudentGroupManager() {
                         Rejoindre
                       </button>
                     ) : (
-                      <span className="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/70">
+                      <span className="dashboard-button-ghost inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/70">
                         <Icon icon="solar:check-read-bold" width={14} />
                         {isMember ? 'Membre' : 'Fermé'}
                       </span>
@@ -346,7 +346,7 @@ export default function StudentGroupManager() {
                       <button
                         type="button"
                         onClick={() => openEdit(group)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10"
+                        className="dashboard-button-ghost inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/80"
                       >
                         <Icon icon="solar:pen-2-linear" width={14} />
                         Éditer

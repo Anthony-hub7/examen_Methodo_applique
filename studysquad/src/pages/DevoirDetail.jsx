@@ -295,8 +295,8 @@ const questions = [...buildQuestions(selectedDevoir), ...extraQuestions]
       userRole={user?.role}
       onLogout={handleLogout}
     >
-      <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4">
+      <div className="dashboard-page-shell">
+        <div className="dashboard-page-content flex flex-col gap-4">
           <section className="rounded-2xl border border-white/10 bg-[#101012] p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>

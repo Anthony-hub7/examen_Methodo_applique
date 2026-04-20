@@ -64,7 +64,7 @@ export default function PostComposer({ onCreated }) {
   const initials = user?.name ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2) : 'U'
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+    <div className="dashboard-panel overflow-hidden">
       {/* Collapsed trigger */}
       {!open ? (
         <button
@@ -75,7 +75,7 @@ export default function PostComposer({ onCreated }) {
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-red/70 to-violet-600/70 text-sm font-bold text-white">
             {initials}
           </div>
-          <span className="flex-1 rounded-xl border border-white/10 bg-black/20 px-4 py-2.5 text-sm text-white/40">
+          <span className="dashboard-subpanel flex-1 px-4 py-2.5 text-sm text-white/40">
             Quoi de neuf, {user?.name?.split(' ')[0] || 'étudiant'} ? Partage quelque chose…
           </span>
           <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export default function PostComposer({ onCreated }) {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="ml-auto rounded-lg border border-white/10 bg-white/5 p-1.5 text-white/60 transition hover:text-white"
+              className="dashboard-button-ghost ml-auto rounded-lg p-1.5 text-white/60 hover:text-white"
             >
               <Icon icon="solar:close-circle-bold" width={18} />
             </button>
@@ -113,7 +113,7 @@ export default function PostComposer({ onCreated }) {
                 }}
                 className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${type === opt.value
                     ? 'border-brand-red/60 bg-brand-red/15 text-white'
-                    : 'border-white/10 bg-white/5 text-white/60 hover:border-white/20 hover:text-white/80'
+                    : 'dashboard-button-ghost text-white/60 hover:text-white/80'
                   }`}
               >
                 <Icon icon={opt.icon} width={14} className={type === opt.value ? 'text-brand-red' : opt.color} />
@@ -132,7 +132,7 @@ export default function PostComposer({ onCreated }) {
               <select
                 value={selectedDevoir}
                 onChange={(e) => setSelectedDevoir(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-violet-500/60"
+                className="dashboard-input w-full px-3 py-2 text-sm text-white/90 focus:border-violet-500/60"
               >
                 <option value="">— Aucun devoir spécifique —</option>
                 {devoirs.map((d) => (
@@ -153,7 +153,7 @@ export default function PostComposer({ onCreated }) {
               <select
                 value={selectedGroupe}
                 onChange={(e) => setSelectedGroupe(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-emerald-500/60"
+                className="dashboard-input w-full px-3 py-2 text-sm text-white/90 focus:border-emerald-500/60"
               >
                 <option value="">— Aucun groupe spécifique —</option>
                 {groups.map((g) => (
@@ -176,7 +176,7 @@ export default function PostComposer({ onCreated }) {
                   ? '👥 Présente ton groupe, ce que vous cherchez…'
                   : '📎 Partage une ressource, un lien, une astuce…'
             }
-            className="min-h-[110px] w-full resize-none rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/90 outline-none transition focus:border-brand-red/50 placeholder:text-white/30"
+            className="dashboard-input min-h-[110px] w-full resize-none px-4 py-3 text-sm text-white/90 placeholder:text-white/30"
             required
             autoFocus
           />
@@ -194,7 +194,7 @@ export default function PostComposer({ onCreated }) {
               <button
                 type="button"
                 onClick={() => { setOpen(false); setContent(''); setError('') }}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/70 transition hover:text-white"
+                className="dashboard-button-ghost px-4 py-2 text-sm font-semibold text-white/70 hover:text-white"
               >
                 Annuler
               </button>

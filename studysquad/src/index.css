@@ -25,20 +25,38 @@ body {
 }
 
 @layer components {
+  .dashboard-page-shell {
+    @apply w-full flex-1 px-4 py-6 sm:px-6 lg:px-8;
+  }
+
+  .dashboard-page-content {
+    @apply mx-auto w-full max-w-6xl;
+  }
+
   .dashboard-panel {
-    @apply rounded-2xl border border-white/15 backdrop-blur-md;
-    background-color: rgba(10, 10, 10, 0.82);
+    @apply rounded-2xl border border-white/15 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-md;
+    background-color: rgba(12, 12, 12, 0.84);
   }
 
   .dashboard-subpanel {
-    @apply rounded-xl border border-white/10 backdrop-blur-sm;
-    background-color: rgba(26, 26, 26, 0.72);
+    @apply rounded-xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-sm;
+    background-color: rgba(24, 24, 24, 0.78);
   }
 
   .dashboard-input {
     @apply rounded-xl border border-white/15 text-white outline-none transition;
     @apply focus:border-brand-red/60;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(8, 8, 8, 0.56);
+  }
+
+  .dashboard-button-ghost {
+    @apply rounded-xl border border-white/10 px-3 py-2 text-sm font-medium text-white/80 transition;
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .dashboard-button-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }
 

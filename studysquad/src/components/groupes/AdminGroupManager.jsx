@@ -190,8 +190,8 @@ export default function AdminGroupManager() {
   }
 
   return (
-    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="dashboard-page-shell">
+      <div className="dashboard-page-content">
         <AnimatePresence>
           {notifications.slice(0, 3).map((notif) => (
             <motion.div
@@ -222,7 +222,7 @@ export default function AdminGroupManager() {
           <button
             type="button"
             onClick={openCreate}
-            className="inline-flex items-center gap-2 rounded-xl bg-brand-red/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-red/30"
+            className="inline-flex items-center gap-2 rounded-xl border border-brand-red/40 bg-brand-red/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-red/25"
           >
             <Icon icon="solar:add-circle-bold" width={18} />
             Créer un groupe
@@ -230,7 +230,7 @@ export default function AdminGroupManager() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-          <aside className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <aside className="dashboard-panel p-4">
             <h3 className="mb-3 text-base font-semibold">Filtres</h3>
             <div className="space-y-3">
               <label className="block">
@@ -240,7 +240,7 @@ export default function AdminGroupManager() {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Nom du groupe..."
-                  className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                  className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                 />
               </label>
 
@@ -249,7 +249,7 @@ export default function AdminGroupManager() {
                 <select
                   value={filterStatus}
                   onChange={(event) => setFilterStatus(event.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                  className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                 >
                   <option value="tous">Tous</option>
                   <option value="active">Actifs</option>
@@ -263,7 +263,7 @@ export default function AdminGroupManager() {
                 <select
                   value={sortBy}
                   onChange={(event) => setSortBy(event.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/90 outline-none transition focus:border-brand-red/60"
+                  className="dashboard-input w-full px-3 py-2 text-sm text-white/90"
                 >
                   <option value="created_at">Plus récent</option>
                   <option value="name">Nom A-Z</option>
@@ -271,7 +271,7 @@ export default function AdminGroupManager() {
                 </select>
               </label>
 
-              <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-center text-sm">
+              <div className="dashboard-subpanel p-3 text-center text-sm">
                 <div className="text-white/70">Total</div>
                 <div className="text-2xl font-bold text-white">{filteredGroups.length}</div>
               </div>
@@ -310,7 +310,7 @@ export default function AdminGroupManager() {
                         <button
                           type="button"
                           onClick={() => openMembers(group)}
-                          className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10"
+                          className="dashboard-button-ghost inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/80"
                         >
                           <Icon icon="solar:users-group-rounded-linear" width={14} />
                           Membres
@@ -319,7 +319,7 @@ export default function AdminGroupManager() {
                         <button
                           type="button"
                           onClick={() => openEdit(group)}
-                          className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10"
+                          className="dashboard-button-ghost inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/80"
                         >
                           <Icon icon="solar:pen-2-linear" width={14} />
                           Éditer

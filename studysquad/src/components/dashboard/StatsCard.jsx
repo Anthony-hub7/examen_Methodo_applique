@@ -139,8 +139,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="dashboard-page-shell">
+      <div className="dashboard-page-content">
         <div className="mb-5">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Vue administrateur</p>
           <h2 className="mt-2 text-xl font-bold tracking-tight text-white">Dashboard Admin</h2>

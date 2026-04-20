@@ -15,7 +15,7 @@ export default function GroupeCard({
   return (
     <motion.div
       layout
-      className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-white/20 hover:bg-white/10"
+      className="dashboard-panel p-4 transition hover:border-white/20 hover:bg-white/10"
     >
       <div className="mb-1 flex items-center gap-2">
         <h3 className="text-lg font-semibold text-white">{group.name}</h3>

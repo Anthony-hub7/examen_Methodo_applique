@@ -113,8 +113,8 @@ export default function ClientDash() {
   }
 
   return (
-    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="dashboard-page-shell">
+      <div className="dashboard-page-content">
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Vue etudiant</p>

@@ -46,6 +46,10 @@ export default function SignupForm() {
     }
   }
 
+  const handleBack = () => {
+    navigate('/')
+  }
+
   return (
     <div className="relative min-h-screen bg-black text-white">
       <video
@@ -64,6 +68,16 @@ export default function SignupForm() {
           onSubmit={handleSubmit}
           className="w-full space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6"
         >
+          <div className="flex items-center justify-start">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-sm font-medium text-white/85 transition hover:border-brand-red/50 hover:text-white"
+            >
+              Retour
+            </button>
+          </div>
+
           <div className="flex flex-col items-center gap-3">
             <img src="/Logo.png" alt="StudySquad logo" className="h-14 w-auto" />
             <Ghost size="md" className="drop-shadow-[0_0_30px_rgba(223,37,49,0.25)]" />

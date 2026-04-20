@@ -67,7 +67,7 @@ export default function CommunityPage() {
       userRole={user?.role}
       onLogout={handleLogout}
     >
-      <div className="mx-auto w-full max-w-6xl px-4 py-6">
+      <div className="dashboard-page-shell dashboard-page-content">
         {/* Page header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-white/95">Communauté</h1>
@@ -105,7 +105,7 @@ export default function CommunityPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher…"
-                  className="rounded-xl border border-white/10 bg-white/5 py-1.5 pl-8 pr-3 text-xs text-white/80 outline-none transition focus:border-brand-red/50 placeholder:text-white/30"
+                  className="dashboard-input py-1.5 pl-8 pr-3 text-xs text-white/80 placeholder:text-white/30"
                 />
               </div>
 
@@ -130,11 +130,11 @@ export default function CommunityPage() {
             {loading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-36 animate-pulse rounded-2xl border border-white/10 bg-white/5" />
+                  <div key={i} className="dashboard-panel h-36 animate-pulse" />
                 ))}
               </div>
             ) : visiblePosts.length === 0 ? (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 py-14 text-center">
+              <div className="dashboard-panel flex flex-col items-center gap-3 py-14 text-center">
                 <Icon icon="solar:chat-round-dots-linear" width={40} className="text-white/20" />
                 <p className="text-sm text-white/50">Aucun post pour le moment.</p>
                 <p className="text-xs text-white/30">Soit le premier à publier ✨</p>
@@ -151,7 +151,7 @@ export default function CommunityPage() {
           {/* ── Right sidebar ── */}
           <aside className="space-y-5">
             {/* User card */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="dashboard-panel p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-red/70 to-violet-600/70 text-sm font-bold text-white">
                   {initials}
@@ -161,7 +161,7 @@ export default function CommunityPage() {
                   <p className="text-xs text-white/45 capitalize">{user?.role || 'Étudiant'}</p>
                 </div>
               </div>
-              <div className="mt-3 grid grid-cols-3 divide-x divide-white/10 rounded-xl border border-white/10 bg-black/20">
+              <div className="dashboard-subpanel mt-3 grid grid-cols-3 divide-x divide-white/10">
                 {[
                   { label: 'Posts', value: stats.posts },
                   { label: 'Likes', value: stats.likes },
@@ -176,7 +176,7 @@ export default function CommunityPage() {
             </div>
 
             {/* Groupes */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="dashboard-panel p-4">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/90">
                 <Icon icon="solar:users-group-rounded-bold" width={16} className="text-emerald-400" />
                 Groupes actifs
@@ -186,7 +186,7 @@ export default function CommunityPage() {
                   <motion.div
                     key={g.id}
                     whileHover={{ x: 2 }}
-                    className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-3 py-2"
+                    className="dashboard-subpanel flex items-center gap-3 px-3 py-2"
                   >
                     <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
                       <Icon icon="solar:users-group-rounded-bold" width={14} />
@@ -204,7 +204,7 @@ export default function CommunityPage() {
             </div>
 
             {/* Devoirs en cours */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="dashboard-panel p-4">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/90">
                 <Icon icon="solar:book-bold" width={16} className="text-violet-400" />
                 Devoirs récents
@@ -216,7 +216,7 @@ export default function CommunityPage() {
                   return (
                     <div
                       key={d.id}
-                      className="flex items-start gap-2 rounded-xl border border-white/8 bg-black/20 px-3 py-2"
+                      className="dashboard-subpanel flex items-start gap-2 px-3 py-2"
                     >
                       <div
                         className={`mt-0.5 h-2 w-2 flex-shrink-0 rounded-full ${isDone ? 'bg-green-400' : isPast ? 'bg-brand-red' : 'bg-amber-400'

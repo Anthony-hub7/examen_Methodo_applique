@@ -126,7 +126,7 @@ export default function PostFeedItem({ post }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.22 }}
-      className="overflow-hidden rounded-2xl border border-white/10 bg-white/5"
+      className="dashboard-panel overflow-hidden"
     >
       {/* Gradient accent band */}
       <div className={`h-1 w-full bg-gradient-to-r ${meta.color}`} />
@@ -158,7 +158,7 @@ export default function PostFeedItem({ post }) {
                   setPostActive(post.id, !(post.isActive !== false))
                 }
                 }
-                className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/60 transition hover:text-white"
+                className="dashboard-button-ghost rounded-lg px-2 py-1 text-xs text-white/60 hover:text-white"
                 title={post.isActive === false ? 'Activer' : 'Désactiver'}
               >
                 <Icon icon={post.isActive === false ? 'solar:eye-bold' : 'solar:eye-closed-bold'} width={14} />
@@ -177,7 +177,7 @@ export default function PostFeedItem({ post }) {
 
         {/* Target tag */}
         {targetText && (
-          <div className={`mb-2 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-black/20 px-2.5 py-1 text-xs font-medium ${meta.accent}`}>
+          <div className={`dashboard-subpanel mb-2 inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium ${meta.accent}`}>
             <Icon icon={post?.target?.devoir ? 'solar:book-bold' : 'solar:users-group-rounded-bold'} width={12} />
             {targetText}
           </div>
@@ -195,7 +195,7 @@ export default function PostFeedItem({ post }) {
             disabled={!userId}
             className={`relative inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-semibold transition ${hasLiked
                 ? 'border-brand-red/50 bg-brand-red/15 text-white'
-                : 'border-white/10 bg-white/5 text-white/70 hover:border-brand-red/40 hover:text-white'
+                : 'dashboard-button-ghost text-white/70 hover:border-brand-red/40 hover:text-white'
               }`}
           >
             <span className={`transition-transform duration-300 ${likeAnimating ? 'scale-125' : 'scale-100'}`}>
@@ -208,7 +208,7 @@ export default function PostFeedItem({ post }) {
           <button
             type="button"
             onClick={handleOpenComment}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-white/70 transition hover:border-white/20 hover:text-white"
+            className="dashboard-button-ghost inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-white/70 hover:text-white"
           >
             <Icon icon="solar:chat-round-dots-bold" width={16} />
             <span>{visibleComments.length > 0 ? visibleComments.length : ''} Commenter</span>
@@ -216,7 +216,7 @@ export default function PostFeedItem({ post }) {
 
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-white/70 transition hover:border-white/20 hover:text-white"
+            className="dashboard-button-ghost inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-white/70 hover:text-white"
           >
             <Icon icon="solar:share-bold" width={16} />
             Partager
@@ -242,7 +242,7 @@ export default function PostFeedItem({ post }) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-white/10 bg-black/20 px-4 pt-3 pb-4"
+            className="overflow-hidden border-t border-white/10 bg-black/25 px-4 pt-3 pb-4"
           >
             {/* Comment input */}
             <form onSubmit={handleSubmitComment} className="mb-3 flex items-center gap-2">
@@ -253,7 +253,7 @@ export default function PostFeedItem({ post }) {
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Écris un commentaire…"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 pr-12 text-sm text-white/90 outline-none transition focus:border-brand-red/50 placeholder:text-white/30"
+                  className="dashboard-input w-full px-4 py-2 pr-12 text-sm text-white/90 placeholder:text-white/30"
                   onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmitComment(e) } }}
                 />
                 <button
@@ -274,7 +274,7 @@ export default function PostFeedItem({ post }) {
                 {visibleComments.map((c) => (
                   <div key={c.id} className="flex items-start gap-2">
                     <Avatar name={c.author?.name} size={7} />
-                    <div className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                    <div className="dashboard-subpanel flex-1 px-3 py-2">
                       <div className="mb-0.5 flex items-center justify-between gap-2">
                         <span className="text-xs font-semibold text-white/85">{c.author?.name || 'Anonyme'}</span>
                         <div className="flex items-center gap-2">

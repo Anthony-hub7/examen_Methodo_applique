@@ -108,8 +108,8 @@ export default function AdminDevoirManager() {
   }
 
   return (
-    <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="dashboard-page-shell">
+      <div className="dashboard-page-content">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Pilotage admin</p>
@@ -348,7 +348,7 @@ export default function AdminDevoirManager() {
               {notifications.slice(0, 10).map((notification) => (
                 <li
                   key={notification.id ?? notification.created_at}
-                  className="flex flex-col gap-1 rounded-xl border border-white/10 bg-brand-soft/72 p-3 sm:flex-row sm:items-center sm:justify-between"
+                  className="dashboard-subpanel flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-white/90">{notification.content}</p>
@@ -357,7 +357,7 @@ export default function AdminDevoirManager() {
                   <span
                     className={
                       notification.is_read
-                        ? 'rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70'
+                        ? 'dashboard-button-ghost rounded-full px-3 py-1 text-xs text-white/70'
                         : 'rounded-full border border-brand-red/50 bg-brand-red/15 px-3 py-1 text-xs font-semibold text-brand-red'
                     }
                   >

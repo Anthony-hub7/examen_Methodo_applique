@@ -28,6 +28,10 @@ export default function LoginForm() {
     }
   }
 
+  const handleBack = () => {
+    navigate('/')
+  }
+
   return (
     <div className="relative min-h-screen bg-black text-white">
       <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover opacity-60">
@@ -39,6 +43,15 @@ export default function LoginForm() {
         <div className="relative mx-auto flex min-h-screen max-w-md items-center px-6">
           
           <form onSubmit={handleSubmit} className="w-full space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="flex items-center justify-start">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-sm font-medium text-white/85 transition hover:border-brand-red/50 hover:text-white"
+              >
+                Retour
+              </button>
+            </div>
             
             <div className="flex flex-col items-center gap-3">
               <img src="/LogoChap.png" alt="StudySquad logo chap" className="h-14 w-auto" />
