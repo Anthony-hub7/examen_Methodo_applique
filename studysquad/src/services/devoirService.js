@@ -45,6 +45,21 @@ function normalizeAttachment(raw) {
   }
 }
 
+function normalizeNotification(raw) {
+  if (!raw || typeof raw !== 'object') return null
+
+  return {
+    id: raw.id ? String(raw.id) : newId(),
+    title: String(raw.title || 'Notification admin'),
+    content: String(raw.content || ''),
+    type: String(raw.type || 'info'),
+    is_read: Boolean(raw.is_read),
+    user_id: raw.user_id ? String(raw.user_id) : 'admin-mock',
+    devoir_id: raw.devoir_id ? String(raw.devoir_id) : null,
+    created_at: String(raw.created_at || nowIso()),
+  }
+}
+
 function normalizeDevoir(raw) {
   if (!raw || typeof raw !== 'object') return null
 
@@ -60,7 +75,7 @@ function buildSeedSnapshot() {
     members: ensureArray(source.members),
     groups: ensureArray(source.groups),
     devoirs: ensureArray(source.devoirs).map((item) => normalizeDevoir(item)).filter(Boolean),
-    notifications: ensureArray(source.notifications),
+    notifications: ensureArray(source.notifications).map((item) => normalizeNotification(item)).filter(Boolean),
     remindersSent: Number(source.remindersSent || 0),
   }
 }
@@ -68,12 +83,14 @@ function buildSeedSnapshot() {
 function ensureSnapshot() {
   const existing = readStorage(STORAGE_KEY, null)
   if (existing && typeof existing === 'object') {
+    const seeded = buildSeedSnapshot()
+    const existingNotifications = ensureArray(existing.notifications).map((item) => normalizeNotification(item)).filter(Boolean)
     const merged = {
       members: ensureArray(existing.members),
       groups: ensureArray(existing.groups),
       devoirs: ensureArray(existing.devoirs).map((item) => normalizeDevoir(item)).filter(Boolean),
-      notifications: ensureArray(existing.notifications),
-      remindersSent: Number(existing.remindersSent || 0),
+      notifications: existingNotifications.length > 0 ? existingNotifications : seeded.notifications,
+      remindersSent: Number(existing.remindersSent || (existingNotifications.length > 0 ? 0 : seeded.remindersSent)),
     }
     writeStorage(STORAGE_KEY, merged)
     return merged
@@ -185,6 +202,34 @@ function normalizeIsoDate(input) {
   return Number.isNaN(date.getTime()) ? null : date.toISOString()
 }
 
+function buildNotification({
+  title,
+  content,
+  type = 'info',
+  isRead = false,
+  userId = 'admin-mock',
+  devoirId = null,
+}) {
+  return normalizeNotification({
+    id: newId(),
+    title,
+    content,
+    type,
+    is_read: isRead,
+    user_id: userId,
+    devoir_id: devoirId,
+    created_at: nowIso(),
+  })
+}
+
+function saveSnapshotWithNotification(snapshot, notification, extras = {}) {
+  return saveSnapshot({
+    ...snapshot,
+    ...extras,
+    notifications: [notification, ...ensureArray(snapshot.notifications)],
+  })
+}
+
 export const devoirService = {
   getAdminSnapshot() {
     return ensureSnapshot()
@@ -199,7 +244,20 @@ export const devoirService = {
         : devoir,
     )
 
-    return saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const updatedSnapshot = saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const updatedDevoir = updatedSnapshot.devoirs.find((devoir) => String(devoir.id) === String(devoirId))
+
+    if (!updatedDevoir) return updatedSnapshot
+
+    const notification = buildNotification({
+      title: 'Devoir mis a jour',
+      content: `Le devoir "${updatedDevoir.titre}" a ete reattribue ou modifie dans l'espace admin.`,
+      type: 'update',
+      userId: updatedDevoir.member_id,
+      devoirId: updatedDevoir.id,
+    })
+
+    return saveSnapshotWithNotification(updatedSnapshot, notification)
   },
 
   markAsDone(devoirId) {
@@ -226,13 +284,36 @@ export const devoirService = {
       attachments: [],
     }
 
-    return saveSnapshot({ ...snapshot, devoirs: [nextDevoir, ...snapshot.devoirs] })
+    const updatedSnapshot = saveSnapshot({ ...snapshot, devoirs: [nextDevoir, ...snapshot.devoirs] })
+    const notification = buildNotification({
+      title: 'Nouveau devoir cree',
+      content: `Le devoir "${nextDevoir.titre}" a ete assigne${nextDevoir.member_id ? ' a un membre' : ''}.`,
+      type: 'assignment',
+      userId: nextDevoir.member_id,
+      devoirId: nextDevoir.id,
+    })
+
+    return saveSnapshotWithNotification(updatedSnapshot, notification)
   },
 
   deleteDevoir(devoirId) {
     const snapshot = ensureSnapshot()
+    const deletedDevoir = snapshot.devoirs.find((devoir) => String(devoir.id) === String(devoirId))
     const nextDevoirs = snapshot.devoirs.filter((devoir) => String(devoir.id) !== String(devoirId))
-    return saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const updatedSnapshot = saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+
+    if (!deletedDevoir) return updatedSnapshot
+
+    const notification = buildNotification({
+      title: 'Devoir supprime',
+      content: `Le devoir "${deletedDevoir.titre}" a ete retire des affectations admin.`,
+      type: 'delete',
+      isRead: true,
+      userId: deletedDevoir.member_id,
+      devoirId: deletedDevoir.id,
+    })
+
+    return saveSnapshotWithNotification(updatedSnapshot, notification)
   },
 
   async addAttachments(devoirId, files = []) {
@@ -259,11 +340,26 @@ export const devoirService = {
       return { ...devoir, attachments: [...current, ...prepared] }
     })
 
-    return saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const updatedSnapshot = saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const targetDevoir = updatedSnapshot.devoirs.find((devoir) => String(devoir.id) === String(devoirId))
+
+    if (!targetDevoir) return updatedSnapshot
+
+    const notification = buildNotification({
+      title: 'Support ajoute',
+      content: `${prepared.length} fichier${prepared.length > 1 ? 's ont ete ajoutes' : ' a ete ajoute'} au devoir "${targetDevoir.titre}".`,
+      type: 'attachment',
+      userId: targetDevoir.member_id,
+      devoirId: targetDevoir.id,
+    })
+
+    return saveSnapshotWithNotification(updatedSnapshot, notification)
   },
 
   removeAttachment(devoirId, attachmentId) {
     const snapshot = ensureSnapshot()
+    const targetDevoir = snapshot.devoirs.find((devoir) => String(devoir.id) === String(devoirId))
+    const removedAttachment = targetDevoir?.attachments?.find((att) => String(att.id) === String(attachmentId))
     const nextDevoirs = snapshot.devoirs.map((devoir) => {
       if (String(devoir.id) !== String(devoirId)) return devoir
       return {
@@ -272,7 +368,20 @@ export const devoirService = {
       }
     })
 
-    return saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+    const updatedSnapshot = saveSnapshot({ ...snapshot, devoirs: nextDevoirs })
+
+    if (!targetDevoir || !removedAttachment) return updatedSnapshot
+
+    const notification = buildNotification({
+      title: 'Support retire',
+      content: `Le fichier "${removedAttachment.name}" a ete retire du devoir "${targetDevoir.titre}".`,
+      type: 'attachment',
+      isRead: true,
+      userId: targetDevoir.member_id,
+      devoirId: targetDevoir.id,
+    })
+
+    return saveSnapshotWithNotification(updatedSnapshot, notification)
   },
 
   sendReminders() {
@@ -290,9 +399,12 @@ export const devoirService = {
     if (toRemind.length === 0) {
       const infoNotification = {
         id: newId(),
+        title: 'Aucun rappel urgent',
         content: 'Aucun devoir a relancer dans les prochaines 24h.',
+        type: 'info',
         is_read: true,
         user_id: 'admin-mock',
+        devoir_id: null,
         created_at: nowIso(),
       }
 
@@ -310,9 +422,12 @@ export const devoirService = {
       const member = memberById.get(devoir.member_id)
       return {
         id: newId(),
+        title: 'Rappel envoye',
         content: `Rappel: "${devoir.titre}" arrive ${member ? `pour ${member.name}` : 'bientot'}.`,
+        type: 'reminder',
         is_read: false,
         user_id: devoir.member_id,
+        devoir_id: devoir.id,
         created_at: nowIso(),
       }
     })
@@ -324,6 +439,32 @@ export const devoirService = {
     })
 
     return { snapshot: updated, addedCount: newNotifications.length }
+  },
+
+  markNotificationAsRead(notificationId) {
+    const snapshot = ensureSnapshot()
+    const nextNotifications = snapshot.notifications.map((notification) =>
+      String(notification.id) === String(notificationId)
+        ? { ...notification, is_read: true }
+        : notification,
+    )
+
+    return saveSnapshot({ ...snapshot, notifications: nextNotifications })
+  },
+
+  markAllNotificationsAsRead() {
+    const snapshot = ensureSnapshot()
+    const nextNotifications = snapshot.notifications.map((notification) => ({ ...notification, is_read: true }))
+    return saveSnapshot({ ...snapshot, notifications: nextNotifications })
+  },
+
+  deleteNotification(notificationId) {
+    const snapshot = ensureSnapshot()
+    const nextNotifications = snapshot.notifications.filter(
+      (notification) => String(notification.id) !== String(notificationId),
+    )
+
+    return saveSnapshot({ ...snapshot, notifications: nextNotifications })
   },
 
   getDevoirComputedState,

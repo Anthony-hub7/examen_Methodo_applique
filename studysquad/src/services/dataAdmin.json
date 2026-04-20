@@ -173,7 +173,38 @@
         "created_at": "2026-04-16T19:20:00.000Z"
       }
     ],
-    "notifications": [],
-    "remindersSent": 0
+    "notifications": [
+      {
+        "id": "notif-001",
+        "title": "Rappel envoye",
+        "content": "Rappel: \"DM - Equations differentielles\" arrive pour Amina Diallo.",
+        "type": "reminder",
+        "is_read": false,
+        "user_id": "7d8d2f8a-3b44-4e5f-a4c2-5a1c3f9d2b10",
+        "devoir_id": "3b9f2a11-3c2e-4c2a-bc1d-1e2f3a4b5c6d",
+        "created_at": "2026-04-16T08:15:00.000Z"
+      },
+      {
+        "id": "notif-002",
+        "title": "Support ajoute",
+        "content": "1 fichier a ete ajoute au devoir \"Mini projet - IA et classification\".",
+        "type": "attachment",
+        "is_read": true,
+        "user_id": "c8a1c9f1-1e2a-4c7b-9a3f-1a2b3c4d5e6f",
+        "devoir_id": "6c5b4a3f-2d1c-4b3a-9e8f-7d6c5b4a3f2e",
+        "created_at": "2026-04-15T14:42:00.000Z"
+      },
+      {
+        "id": "notif-003",
+        "title": "Devoir mis a jour",
+        "content": "Le devoir \"Fiche - Derivees et limites\" a ete reattribue ou modifie dans l'espace admin.",
+        "type": "update",
+        "is_read": false,
+        "user_id": "0f3b6b6c-2b12-4f6f-bd8a-e1c1b2d3c4a5",
+        "devoir_id": "2a7b6c5d-4e3f-4a1b-8c2d-9e0f1a2b3c4d",
+        "created_at": "2026-04-14T10:20:00.000Z"
+      }
+    ],
+    "remindersSent": 2
   }
 }

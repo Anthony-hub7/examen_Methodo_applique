@@ -13,10 +13,12 @@ function buildNavLinks(userRole) {
   const basePath = role === 'admin' ? '/dashboard/admin' : '/dashboard/student'
 
   return {
+    role,
     basePath,
     devoirsPath: `${basePath}/devoirs`,
     groupesPath: `${basePath}/groupes`,
     communityPath: `${basePath}/community`,
+    notificationsPath: role === 'admin' ? `${basePath}/notifications` : null,
   }
 }
 

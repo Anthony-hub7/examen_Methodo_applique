@@ -12,6 +12,8 @@ import {
 
 import { Doughnut, Bar, Line } from "react-chartjs-2"
 import { useState } from "react"
+import { Icon } from "@iconify/react"
+import { Link } from "react-router-dom"
 
 ChartJS.register(
   ArcElement,
@@ -143,7 +145,16 @@ export default function Dashboard() {
       <div className="dashboard-page-content">
         <div className="mb-5">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-red/75">Vue administrateur</p>
-          <h2 className="mt-2 text-xl font-bold tracking-tight text-white">Dashboard Admin</h2>
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-xl font-bold tracking-tight text-white">Dashboard Admin</h2>
+            <Link
+              to="/dashboard/admin/notifications"
+              className="inline-flex items-center gap-2 self-start rounded-xl border border-brand-red/40 bg-brand-red/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-red/25"
+            >
+              <Icon icon="solar:bell-bing-bold-duotone" width={18} />
+              Voir les notifications
+            </Link>
+          </div>
         </div>
 
         {/* TOP STATS */}

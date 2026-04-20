@@ -19,7 +19,6 @@ export default function AdminDevoirManager() {
     members,
     groups,
     filteredDevoirs,
-    notifications,
     remindersSent,
     memberById,
     groupById,
@@ -330,44 +329,6 @@ export default function AdminDevoirManager() {
             )}
           </section>
         </div>
-
-        <section className="dashboard-panel mt-6 p-4">
-          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <h3 className="text-base font-semibold">Notifications / Rappels</h3>
-            <div className="text-sm text-white/70">Dernieres notifications (mock)</div>
-          </div>
-
-          <div className="max-h-72 overflow-y-auto pr-1">
-            {notifications.length === 0 ? (
-              <div className="dashboard-subpanel p-5 text-center text-sm text-white/70">
-                Aucune notification pour le moment. Clique sur "Relancer avec rappels".
-              </div>
-            ) : null}
-
-            <ul className="space-y-2">
-              {notifications.slice(0, 10).map((notification) => (
-                <li
-                  key={notification.id ?? notification.created_at}
-                  className="dashboard-subpanel flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-white/90">{notification.content}</p>
-                    <p className="text-xs text-white/60">{new Date(notification.created_at).toLocaleString('fr-FR')}</p>
-                  </div>
-                  <span
-                    className={
-                      notification.is_read
-                        ? 'dashboard-button-ghost rounded-full px-3 py-1 text-xs text-white/70'
-                        : 'rounded-full border border-brand-red/50 bg-brand-red/15 px-3 py-1 text-xs font-semibold text-brand-red'
-                    }
-                  >
-                    {notification.is_read ? 'Lu' : 'Non lu'}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
 
         <AnimatePresence>
           {modalOpen && editing ? (

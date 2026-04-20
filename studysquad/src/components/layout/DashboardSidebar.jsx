@@ -31,8 +31,8 @@ const labelVariants = {
 }
 
 /* ─── nav items builder ─── */
-function buildItems(basePath, devoirsPath, groupesPath, communityPath) {
-  return [
+function buildItems({ role, basePath, devoirsPath, groupesPath, communityPath, notificationsPath }) {
+  const items = [
     {
       label: 'Accueil',
       subtitle: 'Tableau de bord',
@@ -58,6 +58,17 @@ function buildItems(basePath, devoirsPath, groupesPath, communityPath) {
       icon: 'solar:chat-round-dots-bold-duotone',
     },
   ]
+
+  if (role === 'admin' && notificationsPath) {
+    items.push({
+      label: 'Notifications',
+      subtitle: 'Alertes et rappels',
+      path: notificationsPath,
+      icon: 'solar:bell-bing-bold-duotone',
+    })
+  }
+
+  return items
 }
 
 /* ─── sidebar tooltip (collapsed mode) ─── */
@@ -134,7 +145,9 @@ export default function DashboardSidebar({
   const devoirsPath = navLinks?.devoirsPath || basePath
   const groupesPath = navLinks?.groupesPath || `${basePath}/groupes`
   const communityPath = navLinks?.communityPath || `${basePath}/community`
-  const items = buildItems(basePath, devoirsPath, groupesPath, communityPath)
+  const notificationsPath = navLinks?.notificationsPath || null
+  const role = navLinks?.role || 'student'
+  const items = buildItems({ role, basePath, devoirsPath, groupesPath, communityPath, notificationsPath })
 
   const normalizePath = (path) => String(path).split('#')[0]
   const isActive = (path) => location.pathname === normalizePath(path)

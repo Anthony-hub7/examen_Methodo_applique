@@ -113,6 +113,39 @@ export function useDevoirs() {
     }
   }, [applySnapshot])
 
+  const markNotificationAsRead = useCallback(
+    (notificationId) => {
+      try {
+        const snapshot = devoirService.markNotificationAsRead(notificationId)
+        applySnapshot(snapshot)
+      } catch {
+        setError('Impossible de marquer cette notification comme lue.')
+      }
+    },
+    [applySnapshot],
+  )
+
+  const markAllNotificationsAsRead = useCallback(() => {
+    try {
+      const snapshot = devoirService.markAllNotificationsAsRead()
+      applySnapshot(snapshot)
+    } catch {
+      setError('Impossible de marquer toutes les notifications comme lues.')
+    }
+  }, [applySnapshot])
+
+  const deleteNotification = useCallback(
+    (notificationId) => {
+      try {
+        const snapshot = devoirService.deleteNotification(notificationId)
+        applySnapshot(snapshot)
+      } catch {
+        setError('Suppression de la notification impossible.')
+      }
+    },
+    [applySnapshot],
+  )
+
   const createDevoir = useCallback(
     (payload) => {
       try {
@@ -195,6 +228,9 @@ export function useDevoirs() {
     createDevoir,
     deleteDevoir,
     sendReminders,
+    markNotificationAsRead,
+    markAllNotificationsAsRead,
+    deleteNotification,
     uploadAttachments,
     removeAttachment,
     computeState: devoirService.getDevoirComputedState,
