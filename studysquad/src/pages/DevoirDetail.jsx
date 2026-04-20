@@ -98,6 +98,11 @@ function RichToolbarButton({ active, icon, label, onClick }) {
 }
 
 export default function DevoirDetail() {
+  // const [extraQuestions, setExtraQuestions] = useState([])
+  const [extraQuestionsStore, setExtraQuestionsStore] = useState(() => {
+    const raw = localStorage.getItem('extra_questions_store')
+    return raw ? JSON.parse(raw) : {}
+  })
   const navigate = useNavigate()
   const { user, logout } = useAuth()
   const { loading, devoirs, members, memberById, groupById, formatDateFR } = useDevoirs()
@@ -138,7 +143,14 @@ export default function DevoirDetail() {
 
   const selectedDevoir = availableDevoirs.find((devoir) => String(devoir.id) === String(selectedDevoirId)) || null
 
-  const questions = buildQuestions(selectedDevoir)
+  // const questions = buildQuestions(selectedDevoir)
+  // const questions = [...buildQuestions(selectedDevoir), ...extraQuestions]
+
+  const extraQuestions = selectedDevoir
+  ? extraQuestionsStore[String(selectedDevoir.id)] || []
+  : []
+
+const questions = [...buildQuestions(selectedDevoir), ...extraQuestions]
 
   useEffect(() => {
     if (!questions.some((question) => question.id === activeQuestionId)) {
@@ -234,6 +246,48 @@ export default function DevoirDetail() {
     navigate('/')
   }
 
+  const addQuestion = () => {
+  if (!selectedDevoir) return
+
+  const newQuestion = {
+    id: 'q_extra_' + Date.now(),
+    title: `Question ${questions.length + 1}`,
+    subtitle: 'Nouvelle question',
+    prompt: 'Ecris ta question ici...',
+  }
+
+  setExtraQuestionsStore((prev) => {
+    const devoirId = String(selectedDevoir.id)
+
+    const updated = {
+      ...prev,
+      [devoirId]: [...(prev[devoirId] || []), newQuestion],
+    }
+
+    localStorage.setItem('extra_questions_store', JSON.stringify(updated))
+    return updated
+  })
+}
+
+ const deleteQuestion = (id) => {
+  if (!selectedDevoir) return
+
+  setExtraQuestionsStore((prev) => {
+    const devoirId = String(selectedDevoir.id)
+
+    const updated = {
+      ...prev,
+      [devoirId]: (prev[devoirId] || []).filter((q) => q.id !== id),
+    }
+
+    localStorage.setItem('extra_questions_store', JSON.stringify(updated))
+    return updated
+  })
+
+  if (activeQuestionId === id) {
+    setActiveQuestionId('q1')
+  }
+}
   return (
     <DashboardLayout
       userName={`${user?.name} (${user?.role || 'etudiant'})`}
@@ -416,29 +470,116 @@ export default function DevoirDetail() {
                   </p>
                 </div>
 
-                <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  {questions.map((question) => (
-                    <button
-                      key={question.id}
-                      type="button"
-                      onClick={() => setActiveQuestionId(question.id)}
-                      className={
-                        'rounded-xl border px-3 py-2 text-left transition ' +
-                        (activeQuestionId === question.id
-                          ? 'border-brand-red/70 bg-brand-red/15 text-white'
-                          : 'border-white/10 bg-white/5 text-white/80 hover:border-white/30')
-                      }
-                    >
-                      <p className="text-sm font-semibold">{question.title}</p>
-                      <p className="text-xs text-white/65">{question.subtitle}</p>
-                    </button>
-                  ))}
+                <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-4">
+                  {questions.map((question) => {
+                    const isExtra = question.id.startsWith('q_extra_')
+                    const isActive = activeQuestionId === question.id
+
+                    return (
+                      <div
+                        key={question.id}
+                        className={`group relative rounded-xl border px-3 py-2 transition ${
+                          isActive
+                            ? 'border-brand-red/70 bg-brand-red/15 text-white'
+                            : 'border-white/10 bg-white/5 text-white/80 hover:border-white/30'
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setActiveQuestionId(question.id)}
+                          className="w-full text-left"
+                        >
+                          {/* <p className="text-sm font-semibold"> */}
+                            <p className="text-xs font-semibold truncate">
+                            {question.title}</p>
+                          
+                          {/* <p className="text-xs text-white/65">{question.subtitle}</p> */}
+                          <p className="mt-3 text-[11px] text-white/65 line-clamp-2 break-words">{question.subtitle}</p>
+                        </button>
+
+                        {/* bouton delete visible que sur custom */}
+                        {isExtra && (
+                          <button
+                            onClick={() => deleteQuestion(question.id)}
+                            className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600"
+                          >
+                            <Icon icon="solar:trash-bin-trash-bold" width={16} />
+                          </button>
+                        )}
+                      </div>
+                    )
+                  })}
+
+                  {/* bouton add */}
+                  <button
+                    type="button"
+                    onClick={addQuestion}
+                    className="flex items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/5 text-white/70 hover:border-white/40"
+                  >
+                    <Icon icon="solar:add-circle-bold" width={20} />
+                  </button>
                 </div>
 
                 {activeQuestion ? (
                   <div className="mb-3 rounded-xl border border-white/10 bg-black/30 p-3">
-                    <h3 className="text-base font-semibold text-white">{activeQuestion.title}</h3>
-                    <p className="mt-1 text-sm text-white/70">{activeQuestion.prompt}</p>
+                    
+                    {activeQuestion.id.startsWith('q_extra_') ? (
+                      <>
+                        {/* titre éditable mais même style */}
+                        <div
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) =>
+                            setExtraQuestionsStore((prev) => {
+                              const devoirId = String(selectedDevoir.id)
+
+                              const updated = {
+                                ...prev,
+                                [devoirId]: (prev[devoirId] || []).map((q) =>
+                                  q.id === activeQuestion.id
+                                    ? { ...q, title: e.target.innerText }
+                                    : q
+                                ),
+                              }
+
+                              localStorage.setItem('extra_questions_store', JSON.stringify(updated))
+                              return updated
+                            })
+                          }
+                          className="text-base font-semibold text-white outline-none"
+                        >
+                          {activeQuestion.title}
+                        </div>
+
+                        {/* description éditable */}
+                        <div
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) =>
+                            setExtraQuestions((prev) =>
+                              prev.map((q) =>
+                                q.id === activeQuestion.id
+                                  ? { ...q, prompt: e.target.innerText }
+                                  : q
+                              )
+                            )
+                          }
+                          className="mt-1 text-sm text-white/70 outline-none"
+                        >
+                          {activeQuestion.prompt}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-base font-semibold text-white">
+                          {activeQuestion.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-white/70">
+                          {activeQuestion.prompt}
+                        </p>
+                      </>
+                    )}
+                    
                   </div>
                 ) : null}
 
