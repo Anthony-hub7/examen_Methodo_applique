@@ -3,7 +3,7 @@ import { OrbitControls, Stars } from "@react-three/drei"
 import { useRef, useState } from "react"
 import * as THREE from "three"
 
-// 🔵 ORBITE
+// ORBITE
 function Orbit({ radius }) {
   return (
     <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -18,7 +18,7 @@ function Orbit({ radius }) {
   )
 }
 
-// 🌍 PLANETE
+// PLANETE
 function Planet({ data, onSelect }) {
   const ref = useRef()
   const angle = useRef(Math.random() * Math.PI * 2)
@@ -45,7 +45,7 @@ function Planet({ data, onSelect }) {
   )
 }
 
-// ☀️ SOLEIL
+// SOLEIL
 function Sun() {
   return (
     <>

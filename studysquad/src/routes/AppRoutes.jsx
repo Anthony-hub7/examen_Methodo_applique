@@ -69,7 +69,6 @@ export default function AppRoutes() {
       if (!button || button.disabled || button.getAttribute('aria-disabled') === 'true') {
         return
       }
-
       playSong()
     }
 
@@ -82,16 +81,14 @@ export default function AppRoutes() {
   useEffect(() => {
   const handler = (e) => {
     const el = e.target
-
     if (el.tagName === 'BUTTON') {
       playSong()
     }
   }
 
   document.addEventListener('click', handler)
-
   return () => document.removeEventListener('click', handler)
-}, [])
+  }, [])
 
   return (
     <BrowserRouter>
@@ -146,7 +143,6 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        
         <Route
           path="/dashboard/student"
           element={

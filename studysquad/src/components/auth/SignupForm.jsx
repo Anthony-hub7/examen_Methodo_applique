@@ -55,7 +55,7 @@ export default function SignupForm() {
         playsInline
         className="absolute inset-0 h-full w-full object-cover opacity-60"
       >
-        <source src="/background1.mp4" type="video/mp4" />
+        <source src="/background/background1.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black" />
 

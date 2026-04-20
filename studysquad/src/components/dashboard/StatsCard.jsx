@@ -37,7 +37,7 @@ export default function Dashboard() {
     nbr_devoir_en_retard: 2,
   }
 
-  // 🍩 DOUGHNUT
+  // DOUGHNUT
   const doughnutData = {
     labels: ["Terminés", "En retard", "En cours"],
     datasets: [{
@@ -51,7 +51,7 @@ export default function Dashboard() {
     }]
   }
 
-  // 📊 BAR GLOBAL
+  // BAR GLOBAL
   const barData = {
     labels: ["Clients", "Devoirs", "Groupes", "devoir sans groupe"],
     datasets: [{
@@ -67,7 +67,7 @@ export default function Dashboard() {
     }]
   }
 
-  // 📈 EVOLUTION
+  // EVOLUTION
   const lineData = {
     labels:
       view === "semaine"
