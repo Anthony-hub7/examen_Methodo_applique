@@ -11,6 +11,7 @@ import { useDevoirs } from '../hooks/useDevoirs'
 import { useGroupChat } from '../hooks/useGroupChat'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
+import StudentDevoirManager from '@/components/devoirs/StudentDevoirManager'
 
 const ANSWERS_STORAGE_KEY = 'studysquad_student_devoir_answers'
 const PDF_WORKER_URL = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
@@ -98,6 +99,7 @@ function RichToolbarButton({ active, icon, label, onClick }) {
 }
 
 export default function DevoirDetail() {
+  const [view, setView] = useState('list')
   // const [extraQuestions, setExtraQuestions] = useState([])
   const [extraQuestionsStore, setExtraQuestionsStore] = useState(() => {
     const raw = localStorage.getItem('extra_questions_store')
@@ -295,8 +297,80 @@ const questions = [...buildQuestions(selectedDevoir), ...extraQuestions]
       userRole={user?.role}
       onLogout={handleLogout}
     >
-      <div className="dashboard-page-shell">
-        <div className="dashboard-page-content flex flex-col gap-4">
+      <div className="w-full flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mt-4 flex gap-2">
+          {[
+            {
+              key: 'list',
+              label: 'DEVOIRS',
+              icon: 'solar:document-text-bold',
+              subtitle: '',
+            },
+            {
+              key: 'create',
+              label: 'CRÉER',
+              icon: 'solar:add-circle-bold',
+              subtitle: '',
+            },
+          ].map((item) => {
+            const active = view === item.key
+
+            return (
+              <button
+                key={item.key}
+                onClick={() => setView(item.key)}
+                className={[
+                  'group relative flex flex-1 items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200',
+                  active
+                    ? 'bg-brand-red/[0.08] text-white'
+                    : 'bg-white/[0.02] text-white/60 hover:bg-white/[0.04] hover:text-white/90',
+                ].join(' ')}
+              >
+                {/* ICON BOX */}
+                <div
+                  className={[
+                    'flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200',
+                    active
+                      ? 'text-brand-red'
+                      : 'text-white/50 group-hover:text-white/80',
+                  ].join(' ')}
+                  style={
+                    active
+                      ? {
+                          background:
+                            'linear-gradient(135deg, rgba(223,37,49,0.2), rgba(223,37,49,0.05))',
+                          border: '1px solid rgba(223,37,49,0.2)',
+                          boxShadow: '0 0 16px rgba(223,37,49,0.15)',
+                        }
+                      : {
+                          background: 'rgba(255,255,255,0.03)',
+                          border: '1px solid rgba(255,255,255,0.06)',
+                        }
+                  }
+                >
+                  <Icon icon={item.icon} width={20} />
+                </div>
+
+                <div className="flex flex-1 flex-col items-center justify-center text-center">
+                  <div className="text-xs font-semibold tracking-[0.2em]">
+                    {item.label}
+                  </div>
+                  <div className="text-[11px] text-white/30 leading-tight">
+                    {item.subtitle}
+                  </div>
+                </div>
+
+                {/* ACTIVE DOT / INDICATOR */}
+                {active && (
+                  <span className="absolute right-3 h-2 w-2 rounded-full bg-brand-red shadow-[0_0_10px_rgba(223,37,49,0.6)]" />
+                )}
+              </button>
+            )
+          })}
+        </div>
+      <br/>
+      {view === 'list' && (
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4">
           <section className="rounded-2xl border border-white/10 bg-[#101012] p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>
@@ -674,7 +748,13 @@ const questions = [...buildQuestions(selectedDevoir), ...extraQuestions]
             </section>
           ) : null}
         </div>
+      )}
+      {view === 'create' && (
+        // <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-4 text-white">
+          <StudentDevoirManager />
+        // </div>
+      )}
       </div>
     </DashboardLayout>
   )
-}
+}  

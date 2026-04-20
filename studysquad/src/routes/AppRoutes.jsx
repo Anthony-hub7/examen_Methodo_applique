@@ -14,6 +14,7 @@ import ProtectedRoute from './ProtectedRoute'
 import PublicOnlyRoute from './PublicOnlyRoute'
 import { playSong, playTyping, stopTyping } from '@/services/soundManager'
 import LofiMiniPlayer from '@/components/ui/LofiMiniPlayer'
+import StudentDevoirManager from '@/components/devoirs/StudentDevoirManager'
 
 
 export default function AppRoutes() {
@@ -156,6 +157,14 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['student']}>
               <StudentDevoirsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/student/devoirs/create"
+          element={
+            <ProtectedRoute allowedRoles={['student']}>
+              <StudentDevoirManager />
             </ProtectedRoute>
           }
         />
