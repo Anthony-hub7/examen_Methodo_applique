@@ -128,7 +128,7 @@ export default function Dashboard() {
     ...doughnutData,
     datasets: doughnutData.datasets.map((d) => ({
       ...d,
-      backgroundColor: ["#22c55e", "#df2531", "#facc15"]
+      backgroundColor: ["#2ab15b", "#b3232d", "#dab72f"]
     }))
   }
 
@@ -136,7 +136,7 @@ export default function Dashboard() {
     ...barData,
     datasets: barData.datasets.map((d) => ({
       ...d,
-      backgroundColor: ["rgba(223,37,49,0.9)", "rgba(255,255,255,0.25)", "rgba(162,28,175,0.35)", "rgba(126,235,37,0.25)"]
+      backgroundColor: ["#b3232d", "rgba(255,255,255,0.25)", "rgba(128, 18, 138, 0.35)", "#2ab15b"]
     }))
   }
 

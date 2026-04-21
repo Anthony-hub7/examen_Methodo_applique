@@ -190,7 +190,7 @@ export default function ClientDash() {
                   datasets: [
                     {
                       data: [current.devoirs.termines, current.devoirs.sans_groupe, current.devoirs.en_retard],
-                      backgroundColor: ["#22c55e", "#facc15", "#df2531"]
+                      backgroundColor: ["#2ab15b", "#dab72f", "#df2531"]
                     }
                   ]
                 }}
@@ -213,7 +213,7 @@ export default function ClientDash() {
                   datasets: [
                     {
                       data: [current.groupes.actifs, current.groupes.inactifs],
-                      backgroundColor: ["rgba(223,37,49,0.9)", "rgba(255,255,255,0.25)"],
+                      backgroundColor: ["#df2531c0", "rgba(255,255,255,0.25)"],
                       borderRadius: 10
                     }
                   ]

@@ -1,6 +1,6 @@
 // soundManager.js
 const audio = new Audio('/sound/go.mp3')
-const clicker = new Audio('/sound/click.mp3')
+const clicker = new Audio('/sound/click1.mp3')
 const bye = new Audio('/sound/bye.mp3')
 const TYPING_VOLUME = 1 / 6
 let typing = new Audio('/keyboard.mp3')
